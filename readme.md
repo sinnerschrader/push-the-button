@@ -25,7 +25,7 @@
 
 ### Arduino development
 
-```sh
+```
 # Given atom is installed
 # Given you are connected to the Arduino
 apm install platformio-ide
@@ -72,4 +72,4 @@ node simple-server.js
 
 ## Hardware layout
 
-![](schema.svg)
+Schema has been created with fritzing, the source file is available at `schema.fzz` and `schema.svg`
