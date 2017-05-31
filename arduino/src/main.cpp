@@ -22,9 +22,8 @@ EthernetUDP udpConnection;
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(4, 53, NEO_RGB + NEO_KHZ800);
 
-//unsigned int inputs[] = { 30, 32, 34, 36 };
-unsigned int inputs[] = { 30 };
-int inputsState[] = { 0, 0, 0, 0 };
+unsigned int inputs[] = { 30, 32, 34, 36 };
+uint8_t inputsState[] = { 0, 0, 0, 0 };
 
 void setup()
 {
@@ -37,7 +36,7 @@ void setup()
   strip.begin();
   strip.show();
 
-  for(int i=0; i < sizeof(inputs) -1; i++) {
+  for(unsigned int i=0; i < sizeof(inputs) - 1; i++) {
     pinMode(inputs[0], INPUT_PULLUP);
   }
 }
@@ -64,8 +63,8 @@ bool checkButtons()
 {
   bool changed = false;
 
-  for(int i=0; i < 1; i++) {
-    int val = digitalRead(inputs[i]);
+  for(unsigned int i=0; i < sizeof(inputs) - 1; i++) {
+    uint8_t val = digitalRead(inputs[i]);
 
     if (inputsState[i] != val) {
       Serial.println("change");
@@ -83,7 +82,7 @@ bool checkButtons()
 void send_update()
 {
   udpConnection.beginPacket(server, serverPort);
-  udpConnection.write(inputsState);
+  udpConnection.write(inputsState, 4);
   udpConnection.endPacket();
 }
 
