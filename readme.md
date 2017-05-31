@@ -73,3 +73,8 @@ node simple-server.js
 ## Hardware layout
 
 Schema has been created with fritzing, the source file is available at `schema.fzz` and `schema.svg`
+
+## Testing Button
+
+Pin 30, 32, 34, 36 are configured as input with PULL UP resistors
+connect Pin 30 to GND to trigger button change event to breadboard GND marked with blue - sign 
