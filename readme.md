@@ -6,7 +6,7 @@
 - Arduino Ethernet Shield
 - Adafruit NeoPixels
 
-## Step by step
+## Getting started
 
 - Connect the Arduino to the appropriate pins on a the LED breadboard
 - Connect your machine to the Arduino Ethernet shield
@@ -61,3 +61,11 @@ platformio pio device monitor --port /dev/usbmodem1421
 ```
 node simple-server.js
 ```
+
+## Architecture
+
+- C++ Program running on Arduino ATM Mega reads button states, sets NeoPixel stats per GPIO
+- C++ Program listens on `192.168.100:8888` for UDP packets
+- C++ Program sends UDP state packets to `192.168.1.199:777`
+- NodeJS server listens on `localhost:777` for UDP state packets
+- NodeJS server sends UDP command packets to `192.168.100:8888`
