@@ -18,10 +18,12 @@
   - Subnet-Mask: 255.255.255.0
 
 ## Local Development Environment
-- Atom Editor
-- platformIO
-- platformIO Python module
-- Python
+- Atom Editor `latest`
+- platformIO `latest`
+- Python 
+- NodeJS `>= 6`
+
+### Arduino development
 
 ```
 # Given atom is installed
@@ -52,4 +54,10 @@ platformio pio device monitor --port /dev/usbmodem1421
 # GUI Equivalent
 # PlatformIO => Serial Monitor
 # Generic CDC at /dev/usbmodem1421
+```
+
+### Node server development
+
+```
+node simple-server.js
 ```
