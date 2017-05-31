@@ -10,7 +10,7 @@
 
 - Connect the Arduino to the appropriate pins on a the LED breadboard
 - Connect your machine to the Arduino Ethernet shield
-- Power up the Arduino 
+- Power up the Arduino
 - Perform steps for Local Development Environment if necessary
 - In Network Settings, configure "Thunderbolt Ethernet" to
   - Manual
@@ -20,7 +20,7 @@
 ## Local Development Environment
 - Atom Editor `latest`
 - platformIO `latest`
-- Python 
+- Python
 - NodeJS `>= 6`
 
 ### Arduino development
@@ -37,7 +37,7 @@ cd arduino/
 # Restart Atom as per the green Atom Notification
 # No platformio Account required
 
-platformio update 
+platformio update
 # GUI Equivalent:
 # PlatformIO => Initialize or Update PlatformIO Project
 # Selected board: Arduino Mega or Meta 2560 ATmega2560 (Mega 2560)
@@ -47,7 +47,7 @@ platformio run
 # GUI Equivalent:
 # PlatformIO => Build
 
-platformio run --target upload 
+platformio run --target upload
 # PlatformIO => Upload
 
 platformio pio device monitor --port /dev/usbmodem1421
@@ -69,3 +69,7 @@ node simple-server.js
 - C++ Program sends UDP state packets to `192.168.1.199:777`
 - NodeJS server listens on `localhost:777` for UDP state packets
 - NodeJS server sends UDP command packets to `192.168.100:8888`
+
+## Hardware layout
+
+![](schema.svg)
