@@ -5,6 +5,7 @@
 #include "EthernetUdp.h"
 
 #include "main.h"
+#include "Adafruit_NeoPixel.h"
 
 byte ethernetMac[] = {
   0x90, 0xA2, 0xDA, 0x0D, 0x0F, 0xB2
@@ -19,6 +20,12 @@ unsigned int serverPort = 7777;
 unsigned char packetBuffer[UDP_TX_PACKET_MAX_SIZE];
 EthernetUDP udpConnection;
 
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(4, 53, NEO_RGB + NEO_KHZ800);
+
+//unsigned int inputs[] = { 30, 32, 34, 36 };
+unsigned int inputs[] = { 30 };
+int inputsState[] = { 0, 0, 0, 0 };
+
 void setup()
 {
   Ethernet.begin(ethernetMac, ip);
@@ -26,6 +33,13 @@ void setup()
 
   Serial.begin(9600);
   Serial.println("Starting Arduino");
+
+  strip.begin();
+  strip.show();
+
+  for(int i=0; i < sizeof(inputs) -1; i++) {
+    pinMode(inputs[0], INPUT_PULLUP);
+  }
 }
 
 void parseMessage(unsigned char *bytes)
@@ -37,6 +51,8 @@ void parseMessage(unsigned char *bytes)
       Serial.println("Command 0 Received");
       Serial.print("Led number");
       Serial.print(msg.led);
+      strip.setPixelColor(msg.led, msg.red, msg.green, msg.blue);
+      strip.show();
       break;
     default:
       Serial.println("Unknown command");
@@ -44,8 +60,42 @@ void parseMessage(unsigned char *bytes)
   }
 }
 
+bool checkButtons()
+{
+  bool changed = false;
+
+  for(int i=0; i < 1; i++) {
+    int val = digitalRead(inputs[i]);
+
+    if (inputsState[i] != val) {
+      Serial.println("change");
+      Serial.println(val);
+      Serial.println(inputsState[i]);
+
+      changed = true;
+    }
+    inputsState[i] = val;
+  }
+
+  return changed;
+}
+
+void send_update()
+{
+  udpConnection.beginPacket(server, serverPort);
+  udpConnection.write(inputsState);
+  udpConnection.endPacket();
+}
+
 void loop()
 {
+  bool buttonChange = checkButtons();
+
+  if(buttonChange) {
+    Serial.println("Button Pressed");
+    send_update();
+  }
+
   int packetSize = udpConnection.parsePacket();
   if (packetSize) {
     Serial.println("Incoming Message\n");
