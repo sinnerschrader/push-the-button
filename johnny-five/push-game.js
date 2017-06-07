@@ -9,12 +9,12 @@ board.on("ready", function() {
   console.log('BOARD is ready');
 
   const button1 = new five.Button({
-    pin: 8,
+    pin: 51,
     isPullup: true
   });
 
   const button2 = new five.Button({
-    pin: 9,
+    pin: 53,
     isPullup: true
   });
 
