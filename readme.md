@@ -3,78 +3,45 @@
 ## Required Hardwarde
 
 - Arduino AT Mega
-- Arduino Ethernet Shield
 - Adafruit NeoPixels
+- Arcade Buttons
 
 ## Getting started
 
 - Connect the Arduino to the appropriate pins on a the LED breadboard
-- Connect your machine to the Arduino Ethernet shield
 - Power up the Arduino
 - Perform steps for Local Development Environment if necessary
-- In Network Settings, configure "Thunderbolt Ethernet" to
-  - Manual
-  - IP-Address: 192.168.1.199
-  - Subnet-Mask: 255.255.255.0
 
 ## Local Development Environment
-- Atom Editor `latest`
-- platformIO `latest`
-- Python
+- [Arduino IDE 1.8.3](https://www.arduino.cc/en/Main/Software)
 - NodeJS `>= 6`
 
 ### Arduino development
+- open Arduino IDE
+- under Sketch -> Include Library -> Manage Libraries -> Install Firmata
+- under Tools -> select Arduino/Genuino Mega or Mega 2560
+- under Tools -> select Port /dev/usbmodem[xxxx]
+- to verify the connection click under Tools -> Get Board Info
+- open node_pixel_firmata/node_pixel_firmata.ino
+- upload code to arduino over Sketch -> Upload
+
+### Node Johnny Five app
 
 ```
-# Given atom is installed
-# Given you are connected to the Arduino
-apm install platformio-ide
-pip install -U platformio
-atom arduino/
-cd arduino/
-
-# Install platformio depdencies as per blue Atom Notification
-# Restart Atom as per the green Atom Notification
-# No platformio Account required
-
-platformio update
-# GUI Equivalent:
-# PlatformIO => Initialize or Update PlatformIO Project
-# Selected board: Arduino Mega or Meta 2560 ATmega2560 (Mega 2560)
-# Click "Process"
-
-platformio run
-# GUI Equivalent:
-# PlatformIO => Build
-
-platformio run --target upload
-# PlatformIO => Upload
-
-platformio pio device monitor --port /dev/usbmodem1421
-# GUI Equivalent
-# PlatformIO => Serial Monitor
-# Generic CDC at /dev/usbmodem1421
-```
-
-### Node server development
-
-```
-node simple-server.js
+node push-game.js
 ```
 
 ## Architecture
 
-- C++ Program running on Arduino ATM Mega reads button states, sets NeoPixel stats per GPIO
-- C++ Program listens on `192.168.100:8888` for UDP packets
-- C++ Program sends UDP state packets to `192.168.1.199:777`
-- NodeJS server listens on `localhost:777` for UDP state packets
-- NodeJS server sends UDP command packets to `192.168.100:8888`
+- Firmata with support for NeoPixel is running on the Arduino MEGA
+- NodeJS Johnny Five app connects via serial to the firmata on the arduino
+- NodeJS Johnny Five app has full control over the arduino
 
 ## Hardware layout
 
 Schema has been created with fritzing, the source file is available at `schema.fzz` and `schema.svg`
 
 ## Testing Button
-
-Pin 30, 32, 34, 36 are configured as input with PULL UP resistors
-connect Pin 30 to GND to trigger button change event to breadboard GND marked with blue - sign 
+- Pin 51, 53 are configured as input with PULL UP resistors to get clear states for pushed button
+- The NeoPixel LEDs must be connected to digital PWM PIN 2 - 13 ( currently 13 ) otherwise it is not working
+- The arcade buttons can be attachted to digital PIN 2 - 53
