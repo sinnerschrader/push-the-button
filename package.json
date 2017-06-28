@@ -1,7 +1,10 @@
 {
   "name": "push-push-push-game",
   "description": "shiny button game running on arduino with johnny five",
-  "version": "0.0.1",
+  "version": "0.1.1",
+  "scripts": {
+    "start": "node push-game.js"
+  },
   "dependencies": {
     "johnny-five": "^0.11.1",
     "node-pixel": "^0.9.2"
