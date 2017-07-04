@@ -1,53 +1,95 @@
 const five = require('johnny-five');
 const pixel = require('node-pixel');
+const setPixelColorByCoordinates = require('./utils').setPixelColorByCoordinates;
 
-// Assuming this means "digital" in board.pins
-const DIGITAL_MODE = 6;
 const STRIP_PIN = 6;
 
-const setup = {
-	ORIGIN_PIN: null,
-	MAX_X_PIN: null,
-	MAX_Y_PIN: null
-};
-
 async function game(config = {}) {
-	const setup = config.setup || await getSetup();
+	const board = await createBoard();
+	const setup = await getSetup(board, config);
+	const state = setPixelColorByCoordinates(setup, 'magenta', 0, 0);
+    const strip = await createStrip(board, state.MAX_Y_INDEX + 1);
+    getUpdatePredecate(strip)(state);
 }
 
-game()
+game({
+	ORIGIN_PIN: 50,
+	MAX_X_PIN: 53,
+	MAX_Y_PIN: 53
+})
 	.catch(err => {
 		throw err;
 	});
 
-async function getSetup() {
-	const s = {};
+function getUpdatePredecate(strip) {
+	console.log(strip);
+	return function update(state) {
+		state.PIXELS.forEach(pixel => {
+			strip.pixel(pixel.index).color(pixel.color);
+		});
+		strip.show();
+		return state;
+	}
+}
 
-	const board = await createBoard();
-	s.ORIGIN_PIN = await getOrigin(board);
+async function delay(duration) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, duration)
+    });
+}
 
-	const strip = await createStrip(board);
+async function getSetup(board, seed = {}) {
+	const s = Object.assign({}, seed);
 
-	strip.pixel(0).color('green');
-	strip.show();
+    const strip = await createStrip(board);
 
-	s.MAX_X_PIN = await getPinPress(board);
-	strip.pixel(1).color('green');
-	strip.show();
+    // prompt user input
+	if (!('ORIGIN_PIN' in seed)) {
+		strip.pixel(0).color('red');
+		strip.show();
+		s.ORIGIN_PIN = await getPinPress(board);
+        strip.pixel(0).color('green');
+        strip.show();
+	}
 
-	s.MAX_Y_PIN = await getPinPress(board);
-	strip.pixel(2).color('green');
-	strip.show();
+	if (!('MAX_X_PIN' in seed)) {
+        s.MAX_X_PIN = await getPinPress(board);
+        s.MAX_X_INDEX = s.MAX_X_PIN - s.ORIGIN_PIN;
+        strip.pixel(s.MAX_X_INDEX).color('green');
+        strip.show();
+    }
 
-	strip.color('green');
-	strip.show();
+    s.MAX_X_INDEX = s.MAX_X_PIN - s.ORIGIN_PIN;
+
+    if (!('MAX_Y_PIN' in seed)) {
+        s.MAX_Y_PIN = await getPinPress(board);
+        s.MAX_Y_INDEX = s.MAX_Y_PIN - s.ORIGIN_PIN;
+        strip.pixel(s.MAX_Y_INDEX).color('green');
+        strip.show();
+
+        await delay(1000);
+    }
+
+    s.MAX_Y_INDEX = s.MAX_Y_PIN - s.ORIGIN_PIN;
+
+	const lineLength = s.MAX_X_INDEX + 1;
+	s.PIXELS = range(s.ORIGIN_PIN, s.MAX_Y_INDEX + 1)
+		.map((pin, index) => ({
+			pin,
+			index,
+			pressed: false,
+			color: '#000',
+			x: index % lineLength,
+			y: Math.floor(index / lineLength)
+		}));
+
+    strip.color('#000');
+    strip.show();
 
 	return s;
 }
 
-function getPinPress(board, opts = {}) {
-	const {initial = false} = opts;
-
+function getPinPress(board) {
 	return new Promise(async (resolve, reject) => {
 		const maxPin = Object.keys(board.pins).length;
 
@@ -75,18 +117,6 @@ function getPinPress(board, opts = {}) {
 			});
 		}, 500);
 	});
-}
-
-async function getOrigin(board) {
-	// Initiate test strip
-	const testStrip = await createStrip(board);
-
-	// prompt user input
-	testStrip.pixel(0).color('red');
-	testStrip.show();
-
-	// Wait for user to press the correct button
-	return getPinPress(board, {initial: true});
 }
 
 function createBoard() {
