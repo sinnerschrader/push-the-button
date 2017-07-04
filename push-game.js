@@ -1,85 +1,123 @@
-let five = require("johnny-five");
-let board = new five.Board();
-let pixel = require("node-pixel");
+const five = require('johnny-five');
+const pixel = require('node-pixel');
 
-let strip = null;
+// Assuming this means "digital" in board.pins
+const DIGITAL_MODE = 6;
+const STRIP_PIN = 6;
 
-board.on("ready", function() {
+const setup = {
+	ORIGIN_PIN: null,
+	MAX_X_PIN: null,
+	MAX_Y_PIN: null
+};
 
-  console.log('BOARD is ready');
+async function game(config = {}) {
+	const setup = config.setup || await getSetup();
+}
 
-  const button1 = new five.Button({
-    pin: 51,
-    isPullup: true
-  });
+game()
+	.catch(err => {
+		throw err;
+	});
 
-  const button2 = new five.Button({
-    pin: 53,
-    isPullup: true
-  });
+async function getSetup() {
+	const s = {};
 
-  strip = new pixel.Strip({
-    board: this,
-    controller: 'FIRMATA',
-    data: 13,
-    length: 4,
-    color_order: pixel.COLOR_ORDER.RGB
-  });
+	const board = await createBoard();
+	s.ORIGIN_PIN = await getOrigin(board);
 
-  strip.on("ready", function() {
-    console.log("Strip ready, let's go");
-  });
+	const strip = await createStrip(board);
 
-  button1.on("down", function() {
-    staticRainbow();
-  });
+	strip.pixel(0).color('green');
+	strip.show();
 
-  button1.on("up", function() {
-    strip.off();
-  });
+	s.MAX_X_PIN = await getPinPress(board);
+	strip.pixel(1).color('green');
+	strip.show();
 
-  button2.on("down", function() {
-    strip.colour("orange");
-    strip.show();
-  });
+	s.MAX_Y_PIN = await getPinPress(board);
+	strip.pixel(2).color('green');
+	strip.show();
 
-  button2.on("up", function() {
-    strip.off();
-  });
+	strip.color('green');
+	strip.show();
 
-  function staticRainbow(){
-    console.log('staticRainbow');
+	return s;
+}
 
-    var showColor;
-    for(var i = 0; i < strip.length; i++) {
-        showColor = colorWheel( ( i*256 / strip.length ) & 255 );
-        strip.pixel( i ).color( showColor );
-    }
-    strip.show();
-  }
+function getPinPress(board, opts = {}) {
+	const {initial = false} = opts;
 
-  // Input a value 0 to 255 to get a color value.
-  // The colours are a transition r - g - b - back to r.
-  function colorWheel( WheelPos ){
-    var r,g,b;
-    WheelPos = 255 - WheelPos;
+	return new Promise(async (resolve, reject) => {
+		const maxPin = Object.keys(board.pins).length;
 
-    if ( WheelPos < 85 ) {
-        r = 255 - WheelPos * 3;
-        g = 0;
-        b = WheelPos * 3;
-    } else if (WheelPos < 170) {
-        WheelPos -= 85;
-        r = 0;
-        g = WheelPos * 3;
-        b = 255 - WheelPos * 3;
-    } else {
-        WheelPos -= 170;
-        r = WheelPos * 3;
-        g = 255 - WheelPos * 3;
-        b = 0;
-    }
-    // returns a string with the rgb value to be used as the parameter
-    return "rgb(" + r +"," + g + "," + b + ")";
-  }
-});
+		// Initiate test buttons
+		const testButtons = range(0, maxPin)
+			.filter(pin => pin !== STRIP_PIN)
+			.map(createButtonFromPin);
+
+		// Ignore bogus first down event from all buttons
+		setTimeout(() =>{
+			testButtons.forEach(testButton => {
+				const pin = testButton.pin;
+
+				// Ignore bogus down events for pins 0 and 1
+				if (pin === 0 || pin === 1) {
+					return;
+				}
+
+				function onDown() {
+					testButtons.forEach(testButton => testButton.removeAllListeners('down', onDown));
+					resolve(pin);
+				}
+
+				testButton.on('down', onDown);
+			});
+		}, 500);
+	});
+}
+
+async function getOrigin(board) {
+	// Initiate test strip
+	const testStrip = await createStrip(board);
+
+	// prompt user input
+	testStrip.pixel(0).color('red');
+	testStrip.show();
+
+	// Wait for user to press the correct button
+	return getPinPress(board, {initial: true});
+}
+
+function createBoard() {
+	return new Promise((resolve, reject) => {
+		const board = new five.Board();
+		board.on('ready', () => resolve(board));
+		board.on('error', reject);
+	});
+}
+
+function createButtonFromPin(pin) {
+	return new five.Button({pin, isPullup: true});
+}
+
+function createStrip(board, opts = {}) {
+	const {length = Object.keys(board.pins).length} = opts;
+
+	return new Promise((resolve, reject) => {
+		const strip = new pixel.Strip({
+			board,
+			controller: 'FIRMATA',
+			data: STRIP_PIN,
+			length,
+			color_order: pixel.COLOR_ORDER.RGB
+		});
+		strip.on('ready', () => resolve(strip));
+	});
+}
+
+function range(start, count) {
+	return new Array(count)
+		.fill(true)
+		.map((_, i) => start + i);
+}
