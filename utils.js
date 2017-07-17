@@ -23,7 +23,7 @@
  */
 
 /** @type {State} */
-const dummy = {
+const testData = {
     ORIGIN_PIN: 50,
     MAX_X_PIN: 53,
     MAX_X_INDEX: 3,
@@ -147,6 +147,12 @@ function setPixelColorByCoordinates(state, color, x, y) {
 }
 
 module.exports = {
+    testData,
+    getPixels,
+    getPixelByIndex,
+    getLineLength,
+    getPixelByCoordinates,
+    getPixelIndexFromCoordinates,
     setPixelByCoordinates,
     setPixelColorByCoordinates
 };

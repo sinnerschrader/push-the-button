@@ -15,6 +15,14 @@ npm install
 npm start
 ```
 
+## Mock the hardware
+
+To use mocked hardware use the following command and visit `http://localhost:3000`:
+
+```sh
+npm start -- use-mock
+```
+
 ## Prerequesites
 - NodeJS `>= 8`
 
