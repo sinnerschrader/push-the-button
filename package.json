@@ -3,7 +3,7 @@
   "description": "shiny button game running on arduino with johnny five",
   "version": "0.1.1",
   "scripts": {
-    "start": "node push-game.js",
+    "start": "node runtime.js",
     "test": "node __tests__/mocks/johnny-five.js"
   },
   "dependencies": {

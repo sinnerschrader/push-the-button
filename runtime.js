@@ -1,4 +1,5 @@
 const [ mock ] = process.argv.slice(2);
+const game = require('./game');
 
 // The following block loads mock data if cli arg "use-mock" is defined
 let Board, Button, Strip, COLOR_ORDER;
@@ -11,22 +12,28 @@ if (mock === 'use-mock' || mock === '--use-mock') {
     ({ Strip, COLOR_ORDER } = require('node-pixel'));
 }
 
-const setPixelColorByCoordinates = require('./utils').setPixelColorByCoordinates;
-
 const STRIP_PIN = 16;
 const START_PIN = 22;
 
-async function game(config = {}) {
+async function runtime(config = {}) {
     const board = await createBoard();
-    const setup = await getSetup(board, config);
-    const state = setPixelColorByCoordinates(setup, 'magenta', 0, 0);
+    const state = await getSetup(board, config);
     const strip = await createStrip(board, state.MAX_Y_INDEX + 1);
     const update = getUpdatePredecate(strip);
+    /*
+    // @todo: This could be a basic game runner, still in progress.
+    const gameRunner = (state) => {
+        update(state);
+        console.log('Tick');
+        setTimeout(() => game(state, gameRunner), 20);
+    };
+    */
 
     update(state);
+    game(state, update);
 }
 
-game()
+runtime()
     .catch(err => {
         throw err;
     });
