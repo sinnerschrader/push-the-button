@@ -62,9 +62,15 @@ class Board {
     }
 }
 
-const _callbacks = {};
+const cbs = new Map();
+
 io.on('connection', (socket) => {
-    socket.on('click', (data) => _callbacks[data.id]());
+    socket.on('click', (data) => {
+        const cb = cbs.get(data.id);
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
 });
 
 class Button {
@@ -75,7 +81,7 @@ class Button {
 
     on(eventName, callback) {
         if (eventName === 'down') {
-            _callbacks[this.pin] = callback;
+            cbs.set(this.pin, callback);
         }
     }
 }
