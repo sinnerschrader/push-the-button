@@ -22,7 +22,11 @@ async function runtime(config = {}) {
     const update = getUpdatePredecate(strip);
 
     update(state);
-    game(state, update);
+    try {
+        game(state, update);
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 runtime()
