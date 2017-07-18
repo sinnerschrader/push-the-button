@@ -76,7 +76,8 @@ async function getSetup(board, seed = {}) {
         console.log(s);
     }
 
-    s.MAX_X_INDEX = s.MAX_X_PIN - s.ORIGIN_PIN;
+    // @todo: Validate if we can ignore the index assignment
+    // s.MAX_X_INDEX = s.MAX_X_PIN - s.ORIGIN_PIN;
 
     if (!('MAX_Y_PIN' in seed)) {
         s.MAX_Y_PIN = await getPressFrom(testButtons);
@@ -86,7 +87,8 @@ async function getSetup(board, seed = {}) {
         console.log(s);
     }
 
-    s.MAX_Y_INDEX = s.MAX_Y_PIN - s.ORIGIN_PIN;
+    // @todo: Validate if we can ignore the index assignment
+    // s.MAX_Y_INDEX = s.MAX_Y_PIN - s.ORIGIN_PIN;
 
     const lineLength = s.MAX_X_INDEX + 1;
     s.PIXELS = range(s.ORIGIN_PIN, s.MAX_Y_INDEX + 1)
