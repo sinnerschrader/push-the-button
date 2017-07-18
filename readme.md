@@ -20,7 +20,7 @@ npm start
 To use mocked hardware use the following command and visit `http://localhost:3000`:
 
 ```sh
-npm start -- use-mock
+npm test
 ```
 
 ## Prerequesites

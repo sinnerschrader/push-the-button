@@ -20,14 +20,6 @@ async function runtime(config = {}) {
     const state = await getSetup(board, config);
     const strip = await createStrip(board, state.MAX_Y_INDEX + 1);
     const update = getUpdatePredecate(strip);
-    /*
-    // @todo: This could be a basic game runner, still in progress.
-    const gameRunner = (state) => {
-        update(state);
-        console.log('Tick');
-        setTimeout(() => game(state, gameRunner), 20);
-    };
-    */
 
     update(state);
     game(state, update);
