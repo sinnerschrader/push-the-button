@@ -126,7 +126,7 @@ function registerButtonEvents(state, buttons) {
             eventRegistry.forEach(({ eventName, callback }) => {
                 const pixelIndex = (button.pin - state.ORIGIN_PIN) / 2;
                 if (eventName === 'down') {
-                    callback(getPixelByIndex(state, pixelIndex));
+                    callback(getPixelByIndex(state, pixelIndex).index);
                 }
             });
         });

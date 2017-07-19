@@ -5,8 +5,8 @@ const helper = require('./utils');
  */
 module.exports = function (state, update, on) {
 
-    on('down', (pin) => {
-        console.log(pin);
+    on('down', (pixelIndex) => {
+        console.log(helper.getPixelByIndex(state, pixelIndex));
     });
 
     const flush = () => {
@@ -15,13 +15,13 @@ module.exports = function (state, update, on) {
     };
 
     const b = () => {
-        state = helper.setColorHorizontal(state, 'purple', 0);
+        state = helper.setColorHorizontal(state, ['purple', 'red', 'green', 'blue'], 0);
         update(state);
         setTimeout(() => flush(), 500);
     };
 
     const a = () => {
-        state = helper.setColorHorizontal(state, 'yellow', 0);
+        state = helper.setColorHorizontal(state, ['yellow', 'green', 'blue', 'purple'], 0);
         update(state);
         setTimeout(() => b(), 500);
     };

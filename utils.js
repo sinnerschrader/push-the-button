@@ -78,6 +78,21 @@ function clone(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
+/** @param {string|string[]} colors */
+function createColorArray(colors) {
+    if (typeof colors === 'string') {
+        colors = Array(4).fill(colors);
+    }
+
+    if (Array.isArray(colors) && colors.length < 4) {
+        const tmpLength = colors.length;
+        colors.length = 4;
+        colors = colors.fill(colors[0], tmpLength);
+    }
+
+    return colors;
+}
+
 /** @param {State} state */
 function getPixels(state) {
     return clone(state.PIXELS);
@@ -160,25 +175,41 @@ function setColorAll(state, color) {
     return state;
 }
 
+/**
+ * @param {State} state
+ * @param {string|string[]} color
+ * @param {number} y
+ * @return {State}
+ */
 function setColorHorizontal(state, color, y) {
     const lineLength = getLineLength(state);
+    color = createColorArray(color);
+
     for (let i = 0; i < lineLength; i++) {
-        state = setPixelColorByCoordinates(state, color, 0, y);
-        state = setPixelColorByCoordinates(state, color, 1, y);
-        state = setPixelColorByCoordinates(state, color, 2, y);
-        state = setPixelColorByCoordinates(state, color, 3, y);
+        state = setPixelColorByCoordinates(state, color[0], 0, y);
+        state = setPixelColorByCoordinates(state, color[1], 1, y);
+        state = setPixelColorByCoordinates(state, color[2], 2, y);
+        state = setPixelColorByCoordinates(state, color[3], 3, y);
     }
 
     return state;
 }
 
+/**
+ * @param {State} state
+ * @param {string|string[]} color
+ * @param {number} x
+ * @return {State}
+ */
 function setColorVertical(state, color, x) {
     const lineLength = getLineLength(state);
+    color = createColorArray(color);
+
     for (let i = 0; i < lineLength; i++) {
-        state = setPixelColorByCoordinates(state, color, x, 0);
-        state = setPixelColorByCoordinates(state, color, x, 1);
-        state = setPixelColorByCoordinates(state, color, x, 2);
-        state = setPixelColorByCoordinates(state, color, x, 3);
+        state = setPixelColorByCoordinates(state, color[0], x, 0);
+        state = setPixelColorByCoordinates(state, color[0], x, 1);
+        state = setPixelColorByCoordinates(state, color[0], x, 2);
+        state = setPixelColorByCoordinates(state, color[0], x, 3);
     }
 
     return state;
