@@ -146,6 +146,41 @@ function setPixelColorByCoordinates(state, color, x, y) {
     return setPixelByCoordinates(state, pixel, x, y);
 }
 
+/**
+ * @param {State} state
+ * @param {string} color
+ * @return {State}
+ */
+function setColorAll(state, color) {
+    const lineLength = getLineLength(state);
+    for (let i = 0; i < lineLength; i++) {
+        state = setPixelColorByCoordinates(state, color, 0, i);
+        state = setPixelColorByCoordinates(state, color, 1, i);
+        state = setPixelColorByCoordinates(state, color, 2, i);
+        state = setPixelColorByCoordinates(state, color, 3, i);
+    }
+
+    return state;
+}
+
+/**
+ * @param {State} state
+ * @param {?string} color
+ * @return {State}
+ */
+function turnOff(state, color = 'black') {
+    return setColorAll(state, color);
+}
+
+/**
+ * @param {State} state
+ * @param {?string} color
+ * @return {State}
+ */
+function allOn(state, color = 'white') {
+    return setColorAll(state, color);
+}
+
 module.exports = {
     testData,
     getPixels,
@@ -154,5 +189,7 @@ module.exports = {
     getPixelByCoordinates,
     getPixelIndexFromCoordinates,
     setPixelByCoordinates,
-    setPixelColorByCoordinates
+    setPixelColorByCoordinates,
+    turnOff,
+    allOn
 };

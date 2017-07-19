@@ -6,15 +6,7 @@ const helper = require('./utils');
 module.exports = function (state, update) {
 
     const flush = () => {
-        for (let i = 0; i < 4; i++) {
-            state = helper.setPixelColorByCoordinates(state, 'white', i, i);
-            state = helper.setPixelColorByCoordinates(state, 'white', i, i);
-            state = helper.setPixelColorByCoordinates(state, 'white', i, i);
-            state = helper.setPixelColorByCoordinates(state, 'white', i, i);
-        }
-
-        update(state);
-
+        update(helper.turnOff(state));
         setTimeout(() => a(), 500);
     };
 
