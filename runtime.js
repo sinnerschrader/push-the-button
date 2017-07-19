@@ -1,6 +1,6 @@
 const [ mock ] = process.argv.slice(2);
 const { getPixelByIndex } = require('./utils');
-const game = require('./game');
+const menu = require('./menu');
 
 // The following block loads mock data if cli arg "use-mock" is defined
 let Board, Button, Strip, COLOR_ORDER;
@@ -35,7 +35,7 @@ async function runtime(config = {}) {
     const update = getUpdatePredecate(strip);
 
     update(state);
-    game(state, update, on);
+    menu(state, update, on);
 }
 
 runtime(testSetup)

@@ -108,7 +108,8 @@ function getPixels(state) {
  * @return {State}
  */
 function getPixelByIndex(state, index) {
-    return clone(getPixels(state)[index]);
+    const pixel = getPixels(state)[index];
+    return pixel ? clone(pixel) : null;
 }
 
 /**
@@ -154,6 +155,18 @@ function setPixelByCoordinates(state, pixel, x, y) {
 
 /**
  * @param {State} state
+ * @param {Pixel} pixel
+ * @param {number} index
+ * @return {State}
+ */
+function setPixelByIndex(state, pixel, index) {
+    const clonedState = clone(state);
+    clonedState.PIXELS[index] = pixel;
+    return clonedState;
+}
+
+/**
+ * @param {State} state
  * @param {string} color
  * @param {number} x
  * @param {number} y
@@ -163,6 +176,18 @@ function setPixelColorByCoordinates(state, color, x, y) {
     const pixel = getPixelByCoordinates(state, x, y);
     pixel.color = color;
     return setPixelByCoordinates(state, pixel, x, y);
+}
+
+/**
+ * @param {State} state
+ * @param {string} color
+ * @param {number} index
+ * @return {State}
+ */
+function setPixelColorByIndex(state, color, index) {
+    const pixel = getPixelByIndex(state, index);
+    pixel.color = color;
+    return setPixelByIndex(state, pixel, index);
 }
 
 /**
@@ -224,9 +249,11 @@ module.exports = {
     getPixelByIndex,
     getLineLength,
     getPixelByCoordinates,
+    setPixelByIndex,
     getPixelIndexFromCoordinates,
     setPixelByCoordinates,
     setPixelColorByCoordinates,
+    setPixelColorByIndex,
     turnOff,
     allOn,
     setColorHorizontal,
