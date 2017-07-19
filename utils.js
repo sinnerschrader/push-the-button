@@ -78,16 +78,20 @@ function clone(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
-/** @param {string|string[]} colors */
-function createColorArray(colors) {
+/**
+ * @param {State} state
+ * @param {string|string[]} colors
+ * @return {string[]}
+ */
+function createColorArray(state, colors) {
     if (typeof colors === 'string') {
-        colors = Array(4).fill(colors);
+        colors = Array(getLineLength(state)).fill(colors);
     }
 
-    if (Array.isArray(colors) && colors.length < 4) {
+    if (Array.isArray(colors) && colors.length < getLineLength(state)) {
         const tmpLength = colors.length;
-        colors.length = 4;
-        colors = colors.fill(colors[0], tmpLength);
+        colors.length = getLineLength(state);
+        colors = colors.fill(colors[colors.length - 1], tmpLength);
     }
 
     return colors;
@@ -167,11 +171,8 @@ function setPixelColorByCoordinates(state, color, x, y) {
  * @return {State}
  */
 function setColorAll(state, color) {
-    const lineLength = getLineLength(state);
-    for (let i = 0; i < lineLength; i++) {
-        state = setColorHorizontal(state, color, i);
-    }
-
+    createColorArray(state, color)
+        .forEach((c, i) => state = setColorHorizontal(state, c, i));
     return state;
 }
 
@@ -182,16 +183,8 @@ function setColorAll(state, color) {
  * @return {State}
  */
 function setColorHorizontal(state, color, y) {
-    const lineLength = getLineLength(state);
-    color = createColorArray(color);
-
-    for (let i = 0; i < lineLength; i++) {
-        state = setPixelColorByCoordinates(state, color[0], 0, y);
-        state = setPixelColorByCoordinates(state, color[1], 1, y);
-        state = setPixelColorByCoordinates(state, color[2], 2, y);
-        state = setPixelColorByCoordinates(state, color[3], 3, y);
-    }
-
+    createColorArray(state, color)
+        .forEach((c, i) => state = setPixelColorByCoordinates(state, c, i, y));
     return state;
 }
 
@@ -202,16 +195,8 @@ function setColorHorizontal(state, color, y) {
  * @return {State}
  */
 function setColorVertical(state, color, x) {
-    const lineLength = getLineLength(state);
-    color = createColorArray(color);
-
-    for (let i = 0; i < lineLength; i++) {
-        state = setPixelColorByCoordinates(state, color[0], x, 0);
-        state = setPixelColorByCoordinates(state, color[0], x, 1);
-        state = setPixelColorByCoordinates(state, color[0], x, 2);
-        state = setPixelColorByCoordinates(state, color[0], x, 3);
-    }
-
+    createColorArray(state, color)
+        .forEach((c, i) => state = setPixelColorByCoordinates(state, c, x, i));
     return state;
 }
 

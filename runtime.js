@@ -13,6 +13,13 @@ if (mock === 'use-mock' || mock === '--use-mock') {
     ({ Strip, COLOR_ORDER } = require('node-pixel'));
 }
 
+const testSetup = {
+    ORIGIN_PIN: 0,
+    MAX_X_PIN: 6,
+    MAX_X_INDEX: 3,
+    MAX_Y_PIN: 30,
+    MAX_Y_INDEX: 15
+};
 const STRIP_PIN = 16;
 const START_PIN = 22;
 const eventRegistry = [];
@@ -28,14 +35,10 @@ async function runtime(config = {}) {
     const update = getUpdatePredecate(strip);
 
     update(state);
-    try {
-        game(state, update, on);
-    } catch (e) {
-        console.log(e);
-    }
+    game(state, update, on);
 }
 
-runtime()
+runtime(testSetup)
     .catch(err => {
         throw err;
     });
@@ -59,7 +62,7 @@ async function delay(duration) {
 async function getSetup(board, seed = {}) {
     const s = Object.assign({}, seed);
     const strip = await createStrip(board);
-    const scanRangeLength = (Object.keys(board.pins).length - START_PIN) / 2;
+    const scanRangeLength = 16; // @todo: detect range => (Object.keys(board.pins).length - START_PIN) / 2;
 
     // Initiate test buttons
     const testButtons = range(START_PIN, scanRangeLength)
@@ -114,7 +117,6 @@ async function getSetup(board, seed = {}) {
     strip.color('#000');
     strip.show();
 
-    // @todo: The state does not represent the updated state from the game.
     registerButtonEvents(s, testButtons);
 
     return s;
