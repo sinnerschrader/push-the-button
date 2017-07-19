@@ -3,7 +3,11 @@ const helper = require('./utils');
 /**
  * This is the actual game
  */
-module.exports = function (state, update) {
+module.exports = function (state, update, on) {
+
+    on('down', (pin) => {
+        console.log(pin);
+    });
 
     const flush = () => {
         update(helper.turnOff(state));
@@ -11,24 +15,14 @@ module.exports = function (state, update) {
     };
 
     const b = () => {
-        state = helper.setPixelColorByCoordinates(state, 'blue', 0, 1);
-        state = helper.setPixelColorByCoordinates(state, 'red', 1, 1);
-        state = helper.setPixelColorByCoordinates(state, 'yellow', 2, 1);
-        state = helper.setPixelColorByCoordinates(state, 'purple', 3, 1);
-
+        state = helper.setColorHorizontal(state, 'purple', 0);
         update(state);
-
         setTimeout(() => flush(), 500);
     };
 
     const a = () => {
-        state = helper.setPixelColorByCoordinates(state, 'yellow', 0, 1);
-        state = helper.setPixelColorByCoordinates(state, 'purple', 1, 1);
-        state = helper.setPixelColorByCoordinates(state, 'blue', 2, 1);
-        state = helper.setPixelColorByCoordinates(state, 'green', 3, 1);
-
+        state = helper.setColorHorizontal(state, 'yellow', 0);
         update(state);
-
         setTimeout(() => b(), 500);
     };
 

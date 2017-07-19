@@ -154,10 +154,31 @@ function setPixelColorByCoordinates(state, color, x, y) {
 function setColorAll(state, color) {
     const lineLength = getLineLength(state);
     for (let i = 0; i < lineLength; i++) {
-        state = setPixelColorByCoordinates(state, color, 0, i);
-        state = setPixelColorByCoordinates(state, color, 1, i);
-        state = setPixelColorByCoordinates(state, color, 2, i);
-        state = setPixelColorByCoordinates(state, color, 3, i);
+        state = setColorHorizontal(state, color, i);
+    }
+
+    return state;
+}
+
+function setColorHorizontal(state, color, y) {
+    const lineLength = getLineLength(state);
+    for (let i = 0; i < lineLength; i++) {
+        state = setPixelColorByCoordinates(state, color, 0, y);
+        state = setPixelColorByCoordinates(state, color, 1, y);
+        state = setPixelColorByCoordinates(state, color, 2, y);
+        state = setPixelColorByCoordinates(state, color, 3, y);
+    }
+
+    return state;
+}
+
+function setColorVertical(state, color, x) {
+    const lineLength = getLineLength(state);
+    for (let i = 0; i < lineLength; i++) {
+        state = setPixelColorByCoordinates(state, color, x, 0);
+        state = setPixelColorByCoordinates(state, color, x, 1);
+        state = setPixelColorByCoordinates(state, color, x, 2);
+        state = setPixelColorByCoordinates(state, color, x, 3);
     }
 
     return state;
@@ -191,5 +212,7 @@ module.exports = {
     setPixelByCoordinates,
     setPixelColorByCoordinates,
     turnOff,
-    allOn
+    allOn,
+    setColorHorizontal,
+    setColorVertical
 };

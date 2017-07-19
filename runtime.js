@@ -1,4 +1,5 @@
 const [ mock ] = process.argv.slice(2);
+const { getPixelByIndex } = require('./utils');
 const game = require('./game');
 
 // The following block loads mock data if cli arg "use-mock" is defined
@@ -14,6 +15,11 @@ if (mock === 'use-mock' || mock === '--use-mock') {
 
 const STRIP_PIN = 16;
 const START_PIN = 22;
+const eventRegistry = [];
+
+function on(eventName, callback) {
+    eventRegistry.push({ eventName, callback });
+}
 
 async function runtime(config = {}) {
     const board = await createBoard();
@@ -23,7 +29,7 @@ async function runtime(config = {}) {
 
     update(state);
     try {
-        game(state, update);
+        game(state, update, on);
     } catch (e) {
         console.log(e);
     }
@@ -99,7 +105,6 @@ async function getSetup(board, seed = {}) {
         .map((pin, index) => ({
             pin,
             index,
-            pressed: false,
             color: '#000',
             x: (index * 2) % lineLength,
             y: Math.floor((index * 2) / lineLength)
@@ -109,7 +114,23 @@ async function getSetup(board, seed = {}) {
     strip.color('#000');
     strip.show();
 
+    // @todo: The state does not represent the updated state from the game.
+    registerButtonEvents(s, testButtons);
+
     return s;
+}
+
+function registerButtonEvents(state, buttons) {
+    buttons.forEach((button) => {
+        button.on('down', () => {
+            eventRegistry.forEach(({ eventName, callback }) => {
+                const pixelIndex = (button.pin - state.ORIGIN_PIN) / 2;
+                if (eventName === 'down') {
+                    callback(getPixelByIndex(state, pixelIndex));
+                }
+            });
+        });
+    });
 }
 
 function getPressFrom(buttons) {
