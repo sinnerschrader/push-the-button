@@ -6,11 +6,14 @@
 - Adafruit NeoPixels
 - Arcade Buttons
 
+## Required oftware
+
+- Node.js >=8
+
 ## Getting started
 - Connect the Arduino to the appropriate pins on a the LED breadboard
 
 ```
-n 8.1.2
 npm install
 npm start
 ```
@@ -22,9 +25,6 @@ To use mocked hardware use the following command and visit `http://localhost:300
 ```sh
 npm test
 ```
-
-## Prerequesites
-- NodeJS `>= 8`
 
 ## Architecture
 
