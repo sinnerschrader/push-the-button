@@ -31,7 +31,7 @@ npm test
 To test if the whole strip works use the following command and set the amount of leds used (e.g. 16):
 
 ```sh
-node lib/runtime.js debug 16
+npm run debug -- 16
 ```
 
 ## Architecture
