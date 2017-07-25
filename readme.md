@@ -26,6 +26,14 @@ To use mocked hardware use the following command and visit `http://localhost:300
 npm test
 ```
 
+## Run test programm
+
+To test if the whole strip works use the following command and set the amount of leds used (e.g. 16):
+
+```sh
+node lib/runtime.js debug 16
+```
+
 ## Architecture
 
 - Firmata with support for NeoPixel is running on the Arduino MEGA
