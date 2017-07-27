@@ -4,6 +4,7 @@
   "version": "0.1.1",
   "scripts": {
     "start": "node lib/runtime.js",
+    "watch": "nodemon lib/runtime.js",
     "test": "nodemon lib/runtime.js use-mock",
     "debug": "node lib/runtime.js debug"
   },
