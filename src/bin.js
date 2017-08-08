@@ -1,8 +1,8 @@
-const [ command ] = process.argv.slice(2);
+const commands = process.argv.slice(2);
 const mock = require('mock-require');
 
 // Mock library calls for tests
-if (command === '--emulate') {
+if (commands.includes('--emulate')) {
     mock('johnny-five', require('./__tests__/mocks/johnny-five'));
     mock('node-pixel', require('./__tests__/mocks/node-pixel'));
 }
@@ -15,6 +15,17 @@ const {
     xRequestAnimationFrame
 } = require('./lib/utils');
 const menu = require('./lib/menu');
+const initialSetup = commands.includes('--skipSetup')
+    ? {
+        startPin: 22,
+        stripPin: 16,
+        originPin: 22,
+        maxXPin: 28,
+        maxXIndex: 3,
+        maxYPin: 52,
+        maxYIndex: 15
+    }
+    : {};
 
 /**
  * Register events
@@ -62,18 +73,7 @@ function draw({ strip, state }) {
  */
 async function runtime() {
     let lastRender = Date.now();
-    const descriptor = await getRuntimeDescriptor(
-        /* initial setup here */
-        {
-            startPin: 22,
-            stripPin: 16,
-            originPin: 22,
-            maxXPin: 28,
-            maxXIndex: 3,
-            maxYPin: 52,
-            maxYIndex: 15
-        }
-    );
+    const descriptor = await getRuntimeDescriptor(initialSetup);
     const eventState = getEventState(descriptor);
 
     const loop = (timestamp) => {

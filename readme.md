@@ -28,6 +28,14 @@ To use an emulated hardware use the following command and visit `http://localhos
 npm test
 ```
 
+## Skip setup
+
+Currently included for dev purpose to skip setup for a 4x4 Pixel Board.
+
+```sh
+npm start -- --skipSetup
+```
+
 ## Architecture
 
 - Firmata with support for NeoPixel is running on the Arduino MEGA

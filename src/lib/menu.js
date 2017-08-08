@@ -4,12 +4,10 @@ const utils = require('./utils');
 
 const gamesPath = path.resolve(__dirname, '..', 'games');
 
-const games = fs.readdirSync(gamesPath).map(file => {
-    return {
-        color: path.basename(file, path.extname(file)),
-        fn: require(path.join(gamesPath, file))
-    };
-});
+const games = fs.readdirSync(gamesPath).map(file => ({
+    color: path.basename(file, path.extname(file)),
+    fn: require(path.join(gamesPath, file))
+}));
 
 // @todo: PLEASE REFACTOR ME!!!!
 

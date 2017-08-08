@@ -334,16 +334,11 @@ const xRequestAnimationFrame = (() => {
 const xCancelAnimationFrame = (id) => clearTimeout(id);
 
 module.exports = {
-    range,
-    delay,
     COLOR,
-    createBoard,
-    createStrip,
-    getSetup,
-    getRuntimeDescriptor,
     copy,
-    stateShouldUpdate,
+    getRuntimeDescriptor,
     prepareState,
-    xRequestAnimationFrame,
-    xCancelAnimationFrame
+    stateShouldUpdate,
+    xCancelAnimationFrame,
+    xRequestAnimationFrame
 };
