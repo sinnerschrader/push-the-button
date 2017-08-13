@@ -8,13 +8,23 @@
     "watch": "nodemon src/bin.js",
     "test": "jest",
     "test:watch": "jest --watch",
+    "lint": "eslint src/**",
     "emulate": "nodemon src/bin.js --emulate"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@git.sinnerschrader.com:marfie/push-the-button.git"
+  },
+  "bugs": {
+    "url": "https://git.sinnerschrader.com/marfie/push-the-button/issues"
   },
   "dependencies": {
     "johnny-five": "0.11.3",
     "node-pixel": "0.9.3"
   },
   "devDependencies": {
+    "eslint": "4.4.1",
     "express": "4.15.4",
     "jest": "20.0.4",
     "mock-require": "2.0.2",

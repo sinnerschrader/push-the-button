@@ -1,3 +1,5 @@
+/* global io */
+/* eslint-env browser */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {

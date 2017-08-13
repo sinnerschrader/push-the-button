@@ -28,6 +28,12 @@ npm test
 npm run test:watch
 ```
 
+Also you can lint the files with:
+
+```sh
+npm run lint
+```
+
 ## Emulate hardware
 
 To use an emulated hardware use the following command and visit `http://localhost:4000`:
