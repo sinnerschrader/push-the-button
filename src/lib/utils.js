@@ -2,7 +2,8 @@ const { Board, Button } = require('johnny-five');
 const { Strip, COLOR_ORDER } = require('node-pixel');
 
 /**
- * Create an board compatible empty array with x number values
+ * Create an board compatible empty array with x number values representing the
+ * pin slots located on the board.
  *
  * @param {number} start Start count to fill
  * @param {number} count How many entries to add
@@ -21,7 +22,7 @@ function range(start, count) {
  * @return {Promise}
  */
 async function delay(duration) {
-    return new Promise((resolve) => setTimeout(resolve, duration));
+    return new Promise(resolve => setTimeout(resolve, duration));
 }
 
 const COLOR = Object.freeze({
@@ -58,7 +59,7 @@ const COLOR = Object.freeze({
 function createBoard(options = {}) {
     return new Promise((resolve, reject) => {
         const board = new Board(options);
-        board.on('ready', async () => resolve(board));
+        board.on('ready', () => resolve(board));
         board.on('error', reject);
     });
 }
@@ -135,7 +136,7 @@ function createStrip(board, options = {}) {
  * @resolves {number} The pin pressed
  */
 function getPressFrom(buttons) {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
         let pressed = false;
         buttons.forEach(button => {
             const onDown = () => {
@@ -264,7 +265,7 @@ async function getSetup(board, strip, descriptor = {}) {
 async function getRuntimeDescriptor(descriptor = {}) {
     const { length = 16, pin = 16 } = descriptor;
     const board = await createBoard();
-    const strip = await createStrip(board, {length, pin});
+    const strip = await createStrip(board, { length, pin });
 
     return await getSetup(board, strip, descriptor);
 }
@@ -291,20 +292,30 @@ function copy(obj) {
 }
 
 /**
- * Clone a simple object
+ * Applies event state to the game statge
  *
  * @param {State} state State object
- * @param {number[]} eventState Button press event state
- * @return {State} Prepared and freezed state
+ * @param {boolean[]} eventState Button press event state
+ * @return {State} State with event data
  */
-function prepareState(state, eventState) {
-    return state.reduce((nextState, pixel, index) => {
-        pixel.pressed = eventState[index];
-        return [
-            ...nextState,
-            pixel
-        ];
-    }, []);
+function applyStates(state, eventState) {
+    return state.reduce((nextState, pixel, index) => [
+        ...nextState,
+        Object.assign(
+            pixel,
+            { pressed: Boolean(eventState[index]) }
+        )
+    ], []);
+}
+
+/**
+ * Reset the current to default state
+ *
+ * @param {State} state
+ * @return {State}
+ */
+function resetState(state) {
+    return state.map(pixel => Object.assign(pixel, { color: COLOR.DEFAULT }));
 }
 
 /**
@@ -315,7 +326,7 @@ function prepareState(state, eventState) {
  */
 const xRequestAnimationFrame = (() => {
     let lastTime = 0;
-    return (callback) => {
+    return callback => {
         const currTime = Date.now();
         const timeToCall = Math.max(0, 16 - (currTime - lastTime)); // 16ms/frame
         const id = setTimeout(() => callback(currTime + timeToCall), timeToCall);
@@ -331,13 +342,14 @@ const xRequestAnimationFrame = (() => {
  *
  * @param {number} id Animation frame id
  */
-const xCancelAnimationFrame = (id) => clearTimeout(id);
+const xCancelAnimationFrame = id => clearTimeout(id);
 
 module.exports = {
     COLOR,
     copy,
     getRuntimeDescriptor,
-    prepareState,
+    applyStates,
+    resetState,
     stateShouldUpdate,
     xCancelAnimationFrame,
     xRequestAnimationFrame

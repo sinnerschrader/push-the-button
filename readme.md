@@ -20,12 +20,20 @@ npm install
 npm start
 ```
 
+## Run tests
+
+```sh
+npm test
+# or
+npm run test:watch
+```
+
 ## Emulate hardware
 
 To use an emulated hardware use the following command and visit `http://localhost:4000`:
 
 ```sh
-npm test
+npm emulate # -- --skipSetup
 ```
 
 ## Skip setup

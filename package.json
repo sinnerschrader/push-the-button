@@ -6,14 +6,17 @@
   "scripts": {
     "start": "node src/bin.js",
     "watch": "nodemon src/bin.js",
-    "test": "nodemon src/bin.js --emulate"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "emulate": "nodemon src/bin.js --emulate"
   },
   "dependencies": {
     "johnny-five": "0.11.3",
-    "node-pixel": "0.9.2"
+    "node-pixel": "0.9.3"
   },
   "devDependencies": {
-    "express": "4.15.3",
+    "express": "4.15.4",
+    "jest": "20.0.4",
     "mock-require": "2.0.2",
     "nodemon": "1.11.0",
     "socket.io": "2.0.3"

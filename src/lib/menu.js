@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const utils = require('./utils');
@@ -9,29 +11,37 @@ const games = fs.readdirSync(gamesPath).map(file => ({
     fn: require(path.join(gamesPath, file))
 }));
 
-// @todo: PLEASE REFACTOR ME!!!!
-
 const EXIT_DURATION = 3000;
 let exitHoldDuration = EXIT_DURATION;
 let selectedGame = null;
 
 /**
+ * Show the available games
+ *
+ * @param {State} state
+ * @param {string[]} games
+ * @return {State}
+ */
+const showGames = (state, games) => {
+    state = utils.resetState(state);
+    games.forEach((game, index) => state[index * 5].color = game.color);
+    return state;
+};
+
+/**
  * Game menu
  */
 module.exports = function (state, process) {
-    const [ firstBtn, lastBtn ] = state.filter(p => p.pressed);
+    const [ firstBtn, lastBtn ] = state.filter(pixel => pixel.pressed);
 
     if (exitHoldDuration <= 0) {
         selectedGame = null;
-        if (!state.some(p => p.pressed)) {
+
+        if (!state.some(pixel => pixel.pressed)) {
             exitHoldDuration = EXIT_DURATION;
         }
-        state = state.map(pixel => {
-            pixel.color = utils.COLOR.DEFAULT;
-            return pixel;
-        });
-        games.forEach((game, index) => state[index * 5].color = game.color);
-        return state;
+
+        return showGames(state, games);
     }
 
     // Check if exit button are hold for x seconds
@@ -42,26 +52,15 @@ module.exports = function (state, process) {
     }
 
     if (selectedGame) {
-        state = state.map(pixel => {
-            pixel.color = utils.COLOR.DEFAULT;
-            return pixel;
-        });
-
+        state = utils.resetState(state);
         return selectedGame.fn(state, process, () => {
             selectedGame = null;
-            state = state.map(pixel => {
-                pixel.color = utils.COLOR.DEFAULT;
-                return pixel;
-            });
-            games.forEach((game, index) => state[index * 5].color = game.color);
-            return state;
+            return showGames(state, games);
         });
     }
 
-    const pressed = state.find(p => p.pressed);
-    selectedGame = pressed && games.find(g => pressed.color === g.color);
+    const pressed = state.find(pixel=> pixel.pressed);
+    selectedGame = pressed && games.find(game => pressed.color === game.color);
 
-    // / Show menu
-    games.forEach((game, index) => state[index * 5].color = game.color);
-    return state;
+    return showGames(state, games);
 };

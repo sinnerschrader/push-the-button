@@ -3,13 +3,13 @@ const mock = require('mock-require');
 
 // Mock library calls for tests
 if (commands.includes('--emulate')) {
-    mock('johnny-five', require('./__tests__/mocks/johnny-five'));
-    mock('node-pixel', require('./__tests__/mocks/node-pixel'));
+    mock('johnny-five', require('./emulation/johnny-five'));
+    mock('node-pixel', require('./emulation/node-pixel'));
 }
 
 const {
     getRuntimeDescriptor,
-    prepareState,
+    applyStates,
     copy,
     stateShouldUpdate,
     xRequestAnimationFrame
@@ -76,9 +76,9 @@ async function runtime() {
     const descriptor = await getRuntimeDescriptor(initialSetup);
     const eventState = getEventState(descriptor);
 
-    const loop = (timestamp) => {
+    const loop = timestamp => {
         const progress = timestamp - lastRender;
-        const currentState = prepareState(descriptor.state, eventState);
+        const currentState = applyStates(descriptor.state, eventState);
         const nextState = update(copy(currentState), progress);
 
         if (nextState && stateShouldUpdate(currentState, nextState)) {
@@ -93,7 +93,7 @@ async function runtime() {
     xRequestAnimationFrame(loop);
 }
 
-runtime().catch((err) => {
+runtime().catch(err => {
     console.error(err);
     throw err;
 });
