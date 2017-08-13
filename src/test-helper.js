@@ -1,3 +1,8 @@
+/**
+ * Test helper
+ *
+ * @module test-helper
+ */
 'use strict';
 
 const { COLOR } = require('./lib/utils');

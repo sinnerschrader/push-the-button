@@ -1,3 +1,10 @@
+/**
+ * Menu
+ *
+ * The game menu to show and enter games.
+ *
+ * @module lib/menu
+ */
 'use strict';
 
 const fs = require('fs');

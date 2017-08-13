@@ -9,6 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint src/**",
+    "build:docs": "jsdoc ./src -r -d ./docs -R ./README.md -P ./package.json",
     "emulate": "nodemon src/bin.js --emulate"
   },
   "license": "MIT",
@@ -27,6 +28,7 @@
     "eslint": "4.4.1",
     "express": "4.15.4",
     "jest": "20.0.4",
+    "jsdoc": "3.5.4",
     "mock-require": "2.0.2",
     "nodemon": "1.11.0",
     "socket.io": "2.0.3"

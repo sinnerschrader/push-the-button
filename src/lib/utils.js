@@ -1,3 +1,13 @@
+/**
+ * Utils
+ *
+ * Are defined to help create the actual game process as well as helper for
+ * games defined by user.
+ *
+ * @module lib/utils
+ */
+'use strict';
+
 const { Board, Button } = require('johnny-five');
 const { Strip, COLOR_ORDER } = require('node-pixel');
 
@@ -25,6 +35,15 @@ async function delay(duration) {
     return new Promise(resolve => setTimeout(resolve, duration));
 }
 
+/**
+ * Colors
+ *
+ * @readonly
+ * @type {Object}
+ * @property {string} DEFAULT #000
+ * @property {string} RED red
+ * @property {string} GREEN green
+ */
 const COLOR = Object.freeze({
     DEFAULT: '#000',
     RED: 'red',
@@ -87,7 +106,6 @@ function createBoard(options = {}) {
  * @property {?string} controller Controller type
  * @property {?number} data Pin where the strip is mounted
  * @property {?ColorOrder} colorOrder The strip color order
- * @property {?{ pin: number, length: number }[]} strips Define multiple strips
  */
 
 /**
