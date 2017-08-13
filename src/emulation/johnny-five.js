@@ -62,11 +62,18 @@ class Board {
     }
 }
 
-const cbs = new Map();
+const cbsDown = new Map();
+const cbsUp = new Map();
 
 io.on('connection', (socket) => {
-    socket.on('click', (data) => {
-        const cb = cbs.get(data.id);
+    socket.on('mousedown', (data) => {
+        const cb = cbsDown.get(data.id);
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
+    socket.on('mouseup', (data) => {
+        const cb = cbsUp.get(data.id);
         if (typeof cb === 'function') {
             cb();
         }
@@ -81,13 +88,19 @@ class Button {
 
     on(eventName, callback) {
         if (eventName === 'down') {
-            cbs.set(this.pin, callback);
+            cbsDown.set(this.pin, callback);
+        }
+        if (eventName === 'up') {
+            cbsUp.set(this.pin, callback);
         }
     }
 
     removeListener(eventName) {
         if (eventName === 'down') {
-            cbs.delete(this.pin);
+            cbsDown.delete(this.pin);
+        }
+        if (eventName === 'up') {
+            cbsUp.delete(this.pin);
         }
     }
 }

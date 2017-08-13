@@ -1,4 +1,4 @@
-# push-push-push-game
+# Push The Button
 
 ## Required Hardwarde
 
@@ -9,8 +9,10 @@
 ## Required oftware
 
 - Node.js >=8
+- NPM >= 5
 
 ## Getting started
+
 - Connect the Arduino to the appropriate pins on a the LED breadboard
 
 ```
@@ -18,20 +20,34 @@ npm install
 npm start
 ```
 
-## Mock the hardware
-
-To use mocked hardware use the following command and visit `http://localhost:3000`:
+## Run tests
 
 ```sh
 npm test
+# or
+npm run test:watch
 ```
 
-## Run test programm
-
-To test if the whole strip works use the following command and set the amount of leds used (e.g. 16):
+Also you can lint the files with:
 
 ```sh
-npm run debug -- 16
+npm run lint
+```
+
+## Emulate hardware
+
+To use an emulated hardware use the following command and visit `http://localhost:4000`:
+
+```sh
+npm emulate # -- --skipSetup
+```
+
+## Skip setup
+
+Currently included for dev purpose to skip setup for a 4x4 Pixel Board.
+
+```sh
+npm start -- --skipSetup
 ```
 
 ## Architecture

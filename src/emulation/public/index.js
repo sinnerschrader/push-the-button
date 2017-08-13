@@ -1,3 +1,5 @@
+/* global io */
+/* eslint-env browser */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,10 +22,19 @@ function execute() {
         });
     });
 
-    document.addEventListener('click', ({ target }) => {
-        const { tagName, value } = target;
-        if (tagName.toLowerCase() === 'input') {
-            socket.emit('click', { id: parseInt(value, 10) });
+    document.addEventListener('mousedown', ({ target }) => {
+        const { tagName } = target;
+        if (tagName.toLowerCase() === 'label') {
+            const id = parseInt(target.querySelector('input').value, 10);
+            socket.emit('mousedown', { id });
+        }
+    });
+
+    document.addEventListener('mouseup', ({ target }) => {
+        const { tagName } = target;
+        if (tagName.toLowerCase() === 'label') {
+            const id = parseInt(target.querySelector('input').value, 10);
+            socket.emit('mouseup', { id });
         }
     });
 }

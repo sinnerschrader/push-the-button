@@ -1,19 +1,35 @@
 {
-  "name": "push-push-push-game",
-  "description": "shiny button game running on arduino with johnny five",
+  "name": "push-the-button",
+  "description": "Shiny button game running on arduino with johnny five.",
   "version": "0.1.1",
+  "bin": "src/bin.js",
   "scripts": {
-    "start": "node lib/runtime.js",
-    "watch": "nodemon lib/runtime.js",
-    "test": "nodemon lib/runtime.js use-mock",
-    "debug": "node lib/runtime.js debug"
+    "start": "node src/bin.js",
+    "watch": "nodemon src/bin.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**",
+    "build:docs": "jsdoc ./src -r -d ./docs -R ./README.md -P ./package.json",
+    "emulate": "nodemon src/bin.js --emulate"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@git.sinnerschrader.com:marfie/push-the-button.git"
+  },
+  "bugs": {
+    "url": "https://git.sinnerschrader.com/marfie/push-the-button/issues"
   },
   "dependencies": {
-    "johnny-five": "^0.11.1",
-    "node-pixel": "^0.9.2"
+    "johnny-five": "0.11.3",
+    "node-pixel": "0.9.3"
   },
   "devDependencies": {
-    "express": "4.15.3",
+    "eslint": "4.4.1",
+    "express": "4.15.4",
+    "jest": "20.0.4",
+    "jsdoc": "3.5.4",
+    "mock-require": "2.0.2",
     "nodemon": "1.11.0",
     "socket.io": "2.0.3"
   }
