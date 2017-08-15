@@ -66,3 +66,14 @@ Schema has been created with [fritzing][1], the source file is available at `sch
 - The arcade buttons can be attachted to digital PIN 2 - 53
 
 [1]: http://fritzing.org/home/
+
+
+## Contribute
+
+Feel free to dive in! [Open an issue](https://github.com/sinnerschrader/push-the-button/issues/new) or submit a [Pull Request](https://github.com/sinnerschrader/push-the-button/pull/new/master). :heart:
+
+Please review our [Contributor Guidelines](https://github.com/sinnerschrader/push-the-button/blob/master/CONTRIBUTING.md) and [Code of Conduct](https://github.com/sinnerschrader/push-the-button/blob/master/CODE_OF_CONDUCT.md).
+
+
+## License
+MIT (c) SinnerSchrader and Contributers
