@@ -16,10 +16,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@git.sinnerschrader.com:marfie/push-the-button.git"
+    "url": "git@github.com:sinnerschrader/push-the-button.git"
   },
   "bugs": {
-    "url": "https://git.sinnerschrader.com/marfie/push-the-button/issues"
+    "url": "https://github.com/sinnerschrader/push-the-button/issues"
   },
   "dependencies": {
     "johnny-five": "0.11.3",

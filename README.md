@@ -1,12 +1,12 @@
 # Push The Button
 
-## Required Hardwarde
+## Required Hardware
 
 - Arduino AT Mega
 - Adafruit NeoPixels
 - Arcade Buttons
 
-## Required oftware
+## Required software
 
 - Node.js >=8
 - NPM >= 5
@@ -58,9 +58,11 @@ npm start -- --skipSetup
 
 ## Hardware layout
 
-Schema has been created with fritzing, the source file is available at `schema.fzz` and `schema.svg`
+Schema has been created with [fritzing][1], the source file is available at `schema.fzz` and `schema.svg`
 
 ## Testing Button
 - Pin 51, 53 are configured as input with PULL UP resistors to get clear states for pushed button
 - The NeoPixel LEDs must be connected to digital PWM PIN 2 - 13 ( currently 13 ) otherwise it is not working
 - The arcade buttons can be attachted to digital PIN 2 - 53
+
+[1]: http://fritzing.org/home/
