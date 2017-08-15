@@ -13,6 +13,10 @@
     "build:docs": "jsdoc ./src -r -d ./docs -R ./README.md -P ./package.json",
     "emulate": "nodemon src/bin.js --emulate"
   },
+  "engines": {
+    "node" : ">=8",
+    "npm": ">=5"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
