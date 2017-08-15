@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * This is the actual game
+ * This is the actual dummy game
  */
 module.exports = function (state, process, exit) {
     // ...
