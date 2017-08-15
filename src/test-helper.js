@@ -22,6 +22,43 @@ function getDefaultState(length = 16, size = 4) {
     });
 }
 
+/**
+ * Game
+ *
+ * @method
+ * @name game
+ * @param {State} state The game state
+ * @param {number} process Game loop process time in milliseconds
+ * @param {Function} exit Method to return to the menu
+ * @return {State} The manipulated state object
+ */
+
+/**
+ * GameRunnerOptions
+ *
+ * @typedef {Object} GameRunnerOptions
+ * @property {State} state A game state object to run the game
+ * @property {number} process The game loop process time
+ */
+
+/**
+ * Run a game with default settings
+ *
+ * @param {game} game
+ * @param {GameRunnerOptions} options
+ */
+function* runGame(game, { state = getDefaultState(), process = 16 } = {}) {
+    let running = true;
+
+    while (running) {
+        yield game(state, process, () => {
+            running = false;
+            return getDefaultState();
+        });
+    }
+}
+
 module.exports = {
-    getDefaultState
+    getDefaultState,
+    runGame
 };
