@@ -1,4 +1,12 @@
-# Push The Button
+<h1 align="center">Push The Button</h1>
+<p align="center">
+    <img
+        src="logo.gif"
+        width="100"
+        height="100"
+        alt="Push the button logo"
+    />
+</p>
 
 ## Required Hardware
 
