@@ -12,8 +12,9 @@ const path = require('path');
 const utils = require('./utils');
 
 const gamesPath = path.resolve(__dirname, '..', 'games');
+const isNoDirectory = file => !fs.statSync(path.resolve(gamesPath, file)).isDirectory();
 
-const games = fs.readdirSync(gamesPath).map(file => ({
+const games = fs.readdirSync(gamesPath).filter(isNoDirectory).map(file => ({
     color: path.basename(file, path.extname(file)),
     fn: require(path.join(gamesPath, file))
 }));
