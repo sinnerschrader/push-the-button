@@ -23,6 +23,7 @@
         * [Run tests](#run-tests)
         * [Emulate hardware](#emulate-hardware)
         * [Skip setup](#skip-setup)
+        * [Solve setup](#solve-setup)
         * [Architecture](#architecture)
         * [Hardware layout](#hardware-layout)
         * [Testing Button](#testing-button)
@@ -105,7 +106,7 @@ npm run lint
 To use an emulated hardware use the following command and visit `http://localhost:4000`:
 
 ```sh
-npm emulate # -- --skipSetup
+npm run emulate # -- --skipSetup
 ```
 
 #### Skip setup
@@ -114,6 +115,68 @@ Currently included for dev purpose to skip setup for a 4x4 Pixel Board.
 
 ```sh
 npm start -- --skipSetup
+```
+
+#### Solve setup
+
+The setup is to detect the actual board size used on a table. The following steps are necessary to setup the board:
+
+* On start: the first button is `red`
+* Press the red button: the button is now `green`
+* Press the button on the edge to the right of the green button: the button is now `green`
+* Now press the button located on the buttom from the last one pressed: the button is now `green`
+* The setup is complete and the game menu appears
+
+The following schema describes the setup again, where:
+
+* `o = off`
+* `r = red`
+* `g = green`
+* `y = yellow`
+
+On setup, the first button appears `red`:
+
+```
+r  o  o  o
+o  o  o  o
+o  o  o  o
+o  o  o  o
+```
+
+Press the button, it is now `green`:
+
+```
+g  o  o  o
+o  o  o  o
+o  o  o  o
+o  o  o  o
+```
+
+Next press the most right button, it should also appear `green`:
+
+```
+g  o  o  g
+o  o  o  o
+o  o  o  o
+o  o  o  o
+```
+
+Now press the bottom button located from the last one pressed, it also should light up `green`:
+
+```
+g  o  o  g
+o  o  o  o
+o  o  o  o
+o  o  o  g
+```
+
+**The setup is finished the game menu should appear!** The board looks now like this is its final state:
+
+```
+g  o  o  o
+o  y  o  o
+o  o  o  o
+o  o  o  o
 ```
 
 #### Architecture
