@@ -13,15 +13,19 @@
 * [How to play](#how-to-play)
     * [Green game](#green-game)
     * [Yellow game](#yellow-game)
-* [Required Hardware](#required-hardware)
-* [Required software](#required-software)
+* [Requirements](#requirements)
+    * [Required Hardware](#required-hardware)
+    * [Required software](#required-software)
 * [Getting started](#getting-started)
-* [Run tests](#run-tests)
-* [Emulate hardware](#emulate-hardware)
-* [Skip setup](#skip-setup)
-* [Architecture](#architecture)
-* [Hardware layout](#hardware-layout)
-* [Testing Button](#testing-button)
+    * [Hardware](#hardware)
+    * [Development](#development)
+        * [Setup](#setup)
+        * [Run tests](#run-tests)
+        * [Emulate hardware](#emulate-hardware)
+        * [Skip setup](#skip-setup)
+        * [Architecture](#architecture)
+        * [Hardware layout](#hardware-layout)
+        * [Testing Button](#testing-button)
 * [Contribute](#contribute)
 * [License](#license)
 
@@ -54,27 +58,35 @@ Start the game by pushing the **yellow** button. This is a two player game. Ever
 * The single purple dot gets you back into the menu
 * **Attention:** pushing a non colored dot resets the positions!
 
-## Required Hardware
+## Requirements
+
+### Required Hardware
 
 - Arduino AT Mega
 - Adafruit NeoPixels
 - Arcade Buttons
 
-## Required software
+### Required software
 
 - Node.js >=8
 - NPM >= 5
 
 ## Getting started
 
-- Connect the Arduino to the appropriate pins on a the LED breadboard
+### Hardware
+
+Connect the Arduino to (placed under the table) to the Raspberry Pi with the provided cable. If both are connected you can connect the Arduino with the power cord; all LEDs are blue now. After the boot is completed the menu appears.
+
+### Development
+
+#### Setup
 
 ```
 npm install
 npm start
 ```
 
-## Run tests
+#### Run tests
 
 ```sh
 npm test
@@ -88,7 +100,7 @@ Also you can lint the files with:
 npm run lint
 ```
 
-## Emulate hardware
+#### Emulate hardware
 
 To use an emulated hardware use the following command and visit `http://localhost:4000`:
 
@@ -96,7 +108,7 @@ To use an emulated hardware use the following command and visit `http://localhos
 npm emulate # -- --skipSetup
 ```
 
-## Skip setup
+#### Skip setup
 
 Currently included for dev purpose to skip setup for a 4x4 Pixel Board.
 
@@ -104,17 +116,17 @@ Currently included for dev purpose to skip setup for a 4x4 Pixel Board.
 npm start -- --skipSetup
 ```
 
-## Architecture
+#### Architecture
 
 - Firmata with support for NeoPixel is running on the Arduino MEGA
 - NodeJS Johnny Five app connects via serial to the firmata on the arduino
 - NodeJS Johnny Five app has full control over the arduino
 
-## Hardware layout
+#### Hardware layout
 
 Schema has been created with [fritzing][1], the source file is available at `schema.fzz` and `schema.svg`
 
-## Testing Button
+#### Testing Button
 
 - Pin 51, 53 are configured as input with PULL UP resistors to get clear states for pushed button
 - The NeoPixel LEDs must be connected to digital PWM PIN 2 - 13 ( currently 13 ) otherwise it is not working

@@ -1,6 +1,6 @@
 # Contributing
 
-You want do something for this repo? Nice and easy! And of course: you are the best!
+You want do something for this repo? Nice! And of course: you are the best!
 
 ## Contents
 
