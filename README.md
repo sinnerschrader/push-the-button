@@ -8,6 +8,52 @@
     />
 </p>
 
+## Contents
+
+* [How to play](#how-to-play)
+    * [Green game](#green-game)
+    * [Yellow game](#yellow-game)
+* [Required Hardware](#required-hardware)
+* [Required software](#required-software)
+* [Getting started](#getting-started)
+* [Run tests](#run-tests)
+* [Emulate hardware](#emulate-hardware)
+* [Skip setup](#skip-setup)
+* [Architecture](#architecture)
+* [Hardware layout](#hardware-layout)
+* [Testing Button](#testing-button)
+* [Contribute](#contribute)
+* [License](#license)
+
+* * *
+
+## How to play
+
+Currently included in the MVP are two game modes, a easy one and a harder version of the same game. If there are random colors on the board the screensaver is active. Just push a random button to enter the menu. The menu contains **two** games, green and yellow:
+
+### Green game
+
+Start the game by pushing the **green** button. This is a two player game. Ever player chooses a color: **red** or **orange**.
+
+**Play the game:**
+
+* Every player tries to push his own color (red or orange)
+* The first player who reaches a score of 10, wins!
+* The winning color is shown at the end
+* The single purple dot gets you back into the menu
+* **Attention:** pushing a non colored dot resets the positions!
+
+### Yellow game
+
+Start the game by pushing the **yellow** button. This is a two player game. Ever player chooses a color: **red** or **orange**.
+
+* Every player tries to push his own color (red or orange)
+* After 500ms the position of the dots resets
+* The first player who reaches a score of 10, wins!
+* The winning color is shown at the end
+* The single purple dot gets you back into the menu
+* **Attention:** pushing a non colored dot resets the positions!
+
 ## Required Hardware
 
 - Arduino AT Mega
@@ -69,6 +115,7 @@ npm start -- --skipSetup
 Schema has been created with [fritzing][1], the source file is available at `schema.fzz` and `schema.svg`
 
 ## Testing Button
+
 - Pin 51, 53 are configured as input with PULL UP resistors to get clear states for pushed button
 - The NeoPixel LEDs must be connected to digital PWM PIN 2 - 13 ( currently 13 ) otherwise it is not working
 - The arcade buttons can be attachted to digital PIN 2 - 53
@@ -84,4 +131,5 @@ Please review our [Contributor Guidelines](https://github.com/sinnerschrader/pus
 
 
 ## License
+
 MIT (c) SinnerSchrader and Contributers
