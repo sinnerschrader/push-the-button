@@ -14,7 +14,7 @@
     "emulate": "nodemon src/bin.js --emulate"
   },
   "engines": {
-    "node" : ">=8",
+    "node": ">=8",
     "npm": ">=5"
   },
   "license": "MIT",
@@ -33,7 +33,7 @@
     "eslint": "4.4.1",
     "express": "4.15.4",
     "jest": "20.0.4",
-    "jsdoc": "3.5.4",
+    "jsdoc": "3.5.5",
     "mock-require": "2.0.2",
     "nodemon": "1.11.0",
     "socket.io": "2.0.3"
