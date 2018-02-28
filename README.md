@@ -27,6 +27,10 @@
         * [Architecture](#architecture)
         * [Hardware layout](#hardware-layout)
         * [Testing Button](#testing-button)
+    * [Develop a new game](#develop-a-new-game)
+        * [Create a new game](#create-a-new-game)
+        * [The game loop](#the-game-loop)
+        * [Exit a game](#exit-a-game)
 * [Contribute](#contribute)
 * [License](#license)
 
@@ -197,6 +201,115 @@ Schema has been created with [fritzing][1], the source file is available at `sch
 
 [1]: http://fritzing.org/home/
 
+
+### Develop a new game
+
+In this chapter will be explained how to develop a new game for a table.
+
+#### Create a new game
+
+To create a new game you can create a new JavaScript file with a [CSS supported color name][css] inside the games folder `src/games`:
+
+```shell
+# inside root of the project
+touch src/games/blue.js
+```
+
+Open this file and add the following boilerplate for a game:
+
+```javascript
+'use strict';
+
+/**
+ * This is the blue game
+ */
+module.exports = function (state, process, exit) {
+    // ...
+    return state;
+};
+```
+
+A game is node module exported function that return the state, passed by function arguments. The three arguments the function get are:
+
+| argument | description |
+|----------|-------------|
+| state    | The game state that can be changed and will be returned to change the board. |
+| process  | The time spend for the actual single process (see [The game loop](#the-game-loop)). |
+| exit     | A function to return to the menu. |
+
+The state is an array of `Pixel` objects (the same amount of actual buttons on the table). A `Pixel` represents a button/LED combination of the board. The following example describes the shape of the state:
+
+```javascript
+const state = [
+    // First pixel:
+    {
+        x: 0,
+        y: 0,
+        pressed: false,
+        color: '#000000'
+    },
+    // Second pixel:
+    {
+        x: 1,
+        y: 0,
+        pressed: false,
+        color: '#000000'
+    },
+    // more pixel ...
+];
+```
+
+Every pixel has four values, three of them are **only readable** (at least they don't do anything if you write them): `x` and 'y' representing the position on the table and 'pressed' for the state if the button is pressed.
+
+The fourth property `color` can be set to any css supported color value (even `rgb` and `rgba`) and has a default `#000` for "pixel is turned off".
+
+[css]: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
+
+#### The game loop
+
+If you have the boilerplate code in place you can start to change the table state, e.g.:
+
+```javascript
+'use strict';
+
+module.exports = function (state, process, exit) {
+    // Change the color of the first pixel
+    state[0].color = 'red';
+    return state;
+};
+```
+
+If you would execute this ([maybe by emulation](#emulate-hardware)) the first pixel is always red. To set it indefinitely this is necessary because the state that gets passed down to the game is always fresh (all colors are `#000`). To demonstrate this the following example sets the first pixel to red after 5 seconds:
+
+```javascript
+'use strict';
+
+let gameDuration = 5000;
+
+module.exports = function (state, process, exit) {
+    gameDuration -= process;
+    if (gameDuration <= 0) state[0].color = 'red';
+    return state;
+};
+```
+
+This enables you to think in game loops where you can mutate the state to define your "game world" (the table).
+
+#### Exit a game
+
+To exit a game you can call the passed `exit` method. The following example exits the game after 10 seconds:
+
+```javascript
+'use strict';
+
+let gameDuration = 10000;
+
+module.exports = function (state, process, exit) {
+    gameDuration -= process;
+    if (gameDuration <= 0) return exit();
+    return state;
+};
+```
 
 ## Contribute
 
