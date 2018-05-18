@@ -1,10 +1,8 @@
-/* eslint-disable */
-
 'use strict';
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
-};
+}
 
 let die;
 let dead = false;
@@ -48,7 +46,7 @@ function updateEgg(){
     eggY = clamp(Math.floor(eggAbsoluteY),0,3);
 
     checkCollision();
-};
+}
 
 function resetEgg(){
     eggColor = 'crimson';
