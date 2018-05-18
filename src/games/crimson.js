@@ -5,34 +5,36 @@ function clamp(value, min, max) {
 }
 
 let die;
+let initialized = false;
 let dead = false;
 let paused = false;
 
-let playerPosition = 13;
-let playerColor = ['red','orange','olivedrab'];
-let playerHealth = playerColor.length-1;
-let leftPaddle = 12;
-let rightPaddle = 15;
+const PLAYER_COLOR = ['red','orange','olivedrab'];
+let playerHealth;
+let playerPosition;
+const LEFT_PADDLE = 12;
+const RIGHT_PADDLE = 15;
 let leftPaddlePressed = false;
 let rightPaddlePressed = false;
 
-let eggX = 0;
-let eggY = 0;
-let eggAbsoluteY = 0;
-let eggColor = 'crimson';
+let eggX;
+let eggY;
+let eggAbsoluteY;
+let eggColor;
 
-let speed = .025;
-let acceleration = .005;
+const INITAL_SPEED = .025;
+let speed = INITAL_SPEED;
+const ACCELERATION = .005;
 
-let time = 0;
-let introDuration = 3000;
+const INTRO_DURATION = 3000;
+let introDuration = INTRO_DURATION;
 
 
 function updatePlayer(state){
-    if(state[leftPaddle].pressed){
+    if(state[LEFT_PADDLE].pressed){
         !leftPaddlePressed && playerPosition--;
         leftPaddlePressed = true;
-    } else if(state[rightPaddle].pressed){
+    } else if(state[RIGHT_PADDLE].pressed){
         !rightPaddlePressed && playerPosition++;
         rightPaddlePressed = true;
     } else {
@@ -66,17 +68,19 @@ function hit(){
     playerHealth--;
     if(playerHealth<0){
         dead = true;
-        pause(1000,die);
-    } else{
-        resetEgg();
+        pause(1000,function(){
+            die();
+            init();
+        });
     }
+    resetEgg();
 }
 
 function checkCollision(){
     let eggPosition = eggX+(eggY*4);
     if(eggPosition==playerPosition){
         eggColor = 'green';
-        speed += acceleration;
+        speed += ACCELERATION;
         pause(1000,resetEgg);
     } else if(eggY>=3){
         eggColor = 'red';
@@ -85,7 +89,7 @@ function checkCollision(){
 }
 
 function update(state){
-    state[playerPosition].color = playerColor[playerHealth];
+    state[playerPosition].color = PLAYER_COLOR[playerHealth];
     state[eggX+(eggY*4)].color = eggColor;
 
     if(dead){
@@ -94,21 +98,33 @@ function update(state){
         })
     }
 
-    if(!paused){
+    if(!paused && !dead){
         updateEgg();
         updatePlayer(state);
     }
 }
 
-module.exports = function (state, process, exit) {
-    time += process;
+function init(){
+    dead = false;
+    speed = INITAL_SPEED;
+    playerHealth = PLAYER_COLOR.length-1;
+    playerPosition = 13;
+    introDuration = INTRO_DURATION;
+    resetEgg();
+}
 
+module.exports = function (state, process, exit) {
     die = exit;
 
+    if(!initialized){
+        init();
+        initialized = true;
+    }
+
     if(introDuration>0){
-        let blink = Math.floor(time/250)%2;
-        state[leftPaddle].color = blink? 'olivedrab' : 'white';
-        state[rightPaddle].color = blink? 'white' : 'olivedrab';
+        let blink = Math.floor(introDuration/250)%2;
+        state[LEFT_PADDLE].color = blink? 'olivedrab' : 'white';
+        state[RIGHT_PADDLE].color = blink? 'white' : 'olivedrab';
         introDuration -= process;
     } else {
         update(state);
