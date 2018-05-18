@@ -106,7 +106,7 @@ npm run lint
 To use an emulated hardware use the following command and visit `http://localhost:4000`:
 
 ```sh
-npm run emulate # -- --skipSetup
+npm run emulate -- --skipSetup
 ```
 
 #### Skip setup
