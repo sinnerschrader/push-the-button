@@ -9,6 +9,8 @@ let initialized = false;
 let dead = false;
 let paused = false;
 
+let score;
+
 const PLAYER_COLOR = ['red','orange','olivedrab'];
 let playerHealth;
 let playerPosition;
@@ -68,10 +70,6 @@ function hit(){
     playerHealth--;
     if(playerHealth<0){
         dead = true;
-        pause(1000,function(){
-            die();
-            init();
-        });
     }
     resetEgg();
 }
@@ -81,6 +79,7 @@ function checkCollision(){
     if(eggPosition==playerPosition){
         eggColor = 'green';
         speed += ACCELERATION;
+        score++;
         pause(1000,resetEgg);
     } else if(eggY>=3){
         eggColor = 'red';
@@ -93,8 +92,15 @@ function update(state){
     state[eggX+(eggY*4)].color = eggColor;
 
     if(dead){
-        state.forEach(function(item){
-            item.color = 'red';
+        //show Score
+        let binaryScoreArray = score.toString(2).split('');
+        state.forEach(function(item, index){
+            item.color = binaryScoreArray[index]=="1"? 'red' : 'black';
+            //exit game on button press
+            if(item.pressed){
+                die();
+                init();
+            }
         })
     }
 
@@ -105,6 +111,7 @@ function update(state){
 }
 
 function init(){
+    score = 0;
     dead = false;
     speed = INITAL_SPEED;
     playerHealth = PLAYER_COLOR.length-1;
