@@ -72,40 +72,39 @@ function init(){
 function update(state){
     state.forEach(function(button, index){
         if(dead){
-            button.color = (activePlayer && index<8)? 'red' : 'black';
+            button.color = (activePlayer && index<8) || (!activePlayer && index>=8) ? 'red' : 'black';
             return;
         }
         button.color = getButtonColor(index, button.pressed);
 
         if(button.pressed && !buttonPressed){ // O_o debouncing button press
-
             if(firstPlayer === undefined){ // first move
                 activePlayer = firstPlayer = index<8;
                 sequence.push(index);
                 endTurn = true;
-            } else if(firstPlayer != activePlayer && index>=8){ // second players turn
+            } else if(firstPlayer != activePlayer){ // second players turn
                 // compare to sequence
                 if(index != 15-sequence[mimicStep]){
                     fault();
+                    return;
                 }
                 mimicStep++;
                 // made it to the end of the sequence?
                 if(mimicStep === sequence.length){
                     endTurn = true;
                 }
-
             } else if(firstPlayer === activePlayer){ // first players turn
                 if(mimicStep < sequence.length){
                     // regular steps need to be compared to sequence
                     if(index != sequence[mimicStep]){
                         fault();
+                        return;
                     }
                     mimicStep++;
                 } else { // first player gets to add one more to the sequence
                     sequence.push(index);
                     endTurn = true;
                 }
-
             }
         }
     });
