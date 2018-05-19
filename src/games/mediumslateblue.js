@@ -9,7 +9,6 @@ const END_DURATION = 5000;
 let sequence = []; // store the sequence to be repeated
 let mimicStep = 0; // step of the repetition
 let activePlayer; // true: upper half / false: lower half
-let firstPlayer; // true: upper half / false: lower half
 let buttonPressed = false;
 let wasButtonPressed; // previous cycles buttonPressed
 let endTurn = false; // end players turn?
@@ -52,6 +51,12 @@ function getButtonColor(index, pressed){
     return color; // your turn
 }
 
+// since we only use the indexes of the upper half of the board,
+// we need to translate the lower half accordingly.
+function normalizeIndex(index){
+    return activePlayer? index : 15-index;
+}
+
 function fault(){
     dead = true;
     setTimeout(function(){
@@ -62,7 +67,7 @@ function fault(){
 
 function init(){
     introDuration = INTRO_DURATION;
-    activePlayer = firstPlayer = undefined;
+    activePlayer = undefined;
     wasButtonPressed = undefined;
     sequence = [];
     mimicStep = 0;
@@ -78,31 +83,19 @@ function update(state){
         button.color = getButtonColor(index, button.pressed);
 
         if(button.pressed && !buttonPressed){ // O_o debouncing button press
-            if(firstPlayer === undefined){ // first move
-                activePlayer = firstPlayer = index<8;
-                sequence.push(index);
+            if(sequence.length === 0){ // first move
+                activePlayer = index<8;
+                sequence.push(normalizeIndex(index));
                 endTurn = true;
-            } else if(firstPlayer != activePlayer){ // second players turn
-                // compare to sequence
-                if(index != 15-sequence[mimicStep]){
-                    fault();
-                    return;
-                }
-                mimicStep++;
-                // made it to the end of the sequence?
-                if(mimicStep === sequence.length){
-                    endTurn = true;
-                }
-            } else if(firstPlayer === activePlayer){ // first players turn
+            } else {
                 if(mimicStep < sequence.length){
-                    // regular steps need to be compared to sequence
-                    if(index != sequence[mimicStep]){
+                    if(normalizeIndex(index) != sequence[mimicStep]){
                         fault();
                         return;
                     }
                     mimicStep++;
-                } else { // first player gets to add one more to the sequence
-                    sequence.push(index);
+                } else { // add one more to the sequence
+                    sequence.push(normalizeIndex(index));
                     endTurn = true;
                 }
             }
