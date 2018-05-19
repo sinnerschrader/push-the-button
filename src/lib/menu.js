@@ -19,9 +19,17 @@ const games = fs.readdirSync(gamesPath).filter(isNoDirectory).map(file => ({
     fn: require(path.join(gamesPath, file))
 }));
 
+const screensaver = {
+    color: 'black',
+    fn: require('./screensaver.js')
+}
+
 const EXIT_DURATION = 3000;
 let exitHoldDuration = EXIT_DURATION;
 let selectedGame = null;
+
+let idleTimeout;
+const IDLE_DURATION = 10000;
 
 /**
  * Show the available games
@@ -41,6 +49,12 @@ const showGames = (state, games) => {
  */
 module.exports = function (state, process) {
     const [ firstBtn, lastBtn ] = state.filter(pixel => pixel.pressed);
+
+    if(!idleTimeout){
+        idleTimeout = setTimeout( () => selectedGame = screensaver,IDLE_DURATION);
+    }
+
+    console.log(!!idleTimeout, selectedGame);
 
     if (exitHoldDuration <= 0) {
         selectedGame = null;
@@ -68,6 +82,10 @@ module.exports = function (state, process) {
     }
 
     const pressed = state.find(pixel=> pixel.pressed);
+    if(pressed){
+        clearTimeout(idleTimeout);
+        idleTimeout = undefined;
+    }
     selectedGame = pressed && games.find(game => pressed.color === game.color);
 
     return showGames(state, games);
