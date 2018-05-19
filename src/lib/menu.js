@@ -54,8 +54,6 @@ module.exports = function (state, process) {
         idleTimeout = setTimeout( () => selectedGame = screensaver,IDLE_DURATION);
     }
 
-    console.log(!!idleTimeout, selectedGame);
-
     if (exitHoldDuration <= 0) {
         selectedGame = null;
 
