@@ -4,11 +4,13 @@ let cState = [];
 let initialized = false;
 let introDuration = false;
 const INTRO_DURATION = 1000;
+const MAX_TIME = Number.MAX_SAFE_INTEGER;
 let isAnimating = false;
 let targetColor;
 let currentColor;
 let speed = [];
 let buttonIndex;
+let time;
 
 function getRandomButtonIndex(){
     return Math.round(Math.random() * 15);
@@ -84,6 +86,7 @@ function dim(){
 }
 
 function init(state){
+    time = 0;
     introDuration = INTRO_DURATION;
     cState = [];
     state.forEach(function(button,index){
@@ -93,6 +96,10 @@ function init(state){
 }
 
 module.exports = function (state, process, exit) {
+    time+=process;
+    if(time>= MAX_TIME){
+        time = 0;
+    }
     if(!initialized){
         init(state);
         initialized = true;
@@ -110,7 +117,10 @@ module.exports = function (state, process, exit) {
         currentColor = cState[buttonIndex];
     }
     transition();
-    dim();
+
+    if(!Math.round((time/100)%4)){
+        dim();
+    }
 
     state.forEach(function(item,index){
         item.color = rgbArray2hex(cState[index]);
