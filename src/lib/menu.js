@@ -55,7 +55,6 @@ const showIntro = (state, time) => {
     } else {
         color = time*3;
     }
-    console.log(color, time, INTRO_DURATION/2);
 
     state.forEach(element => {
         element.color = color_utils.rgbArray2hex([color,color,color]);
