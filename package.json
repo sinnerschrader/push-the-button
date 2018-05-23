@@ -26,16 +26,16 @@
     "url": "https://github.com/sinnerschrader/push-the-button/issues"
   },
   "dependencies": {
-    "johnny-five": "0.11.3",
+    "johnny-five": "0.15.0",
     "node-pixel": "0.9.3"
   },
   "devDependencies": {
-    "eslint": "4.4.1",
-    "express": "4.15.4",
-    "jest": "20.0.4",
+    "eslint": "4.19.1",
+    "express": "4.16.3",
+    "jest": "22.4.4",
     "jsdoc": "3.5.5",
-    "mock-require": "2.0.2",
-    "nodemon": "1.11.0",
-    "socket.io": "2.0.3"
+    "mock-require": "3.0.2",
+    "nodemon": "1.17.4",
+    "socket.io": "2.1.1"
   }
 }
