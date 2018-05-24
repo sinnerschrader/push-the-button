@@ -12,11 +12,8 @@ function execute() {
 
     socket.on('update', (pixels) => {
         JSON.parse(pixels).forEach(({ id, color }) => {
-            const pixelElement = document.querySelector(`[for="pixel-${id}"]`);
+            const pixelElement = document.querySelector(`[for="pixel-${id}"] input`);
             if (pixelElement) {
-                if (color === '#000' || color === 'black') {
-                    color = '#fff';
-                }
                 pixelElement.style.background = color;
             }
         });

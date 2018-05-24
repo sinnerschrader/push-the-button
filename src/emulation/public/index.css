@@ -1,9 +1,43 @@
-label {
-	height: 40px;
-	width: 40px;
-	display: inline-block;
+body {
+    background: #111;
 }
 
-input {
-	display: none;
+.table {
+    margin: 0 auto;
+    width: 220px;
+}
+
+.button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.button:hover::after {
+    opacity: .25;
+}
+
+.button::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: .15;
+}
+
+.plastic {
+    -webkit-appearance: none;
+    height: 40px;
+    width: 40px;
+    margin: 0 10px 10px 0;
+    display: inline-block;
+    border-radius: 50%;
+    border: 1px solid #fff;
 }
