@@ -10,7 +10,7 @@ const renderPixels = (length) => {
             <link rel="stylesheet" href="static/index.css" />
         </head>
         <body>
-            <form>
+            <form class="table">
                 ${pixels.map((_, index) => {
                     // This is a hack to simulate pin slots
                     const pixelSlot = index * 2;
@@ -20,8 +20,8 @@ const renderPixels = (length) => {
                     }
                     return `
                     ${br}
-                    <label style="border:1px solid black;background:#fff" for="pixel-${pixelSlot}">
-                        <input type="checkbox" value="${pixelSlot}" id="pixel-${pixelSlot}" />
+                    <label class="button" for="pixel-${pixelSlot}">
+                        <input class="plastic" type="checkbox" value="${pixelSlot}" id="pixel-${pixelSlot}" />
                     </label>`;
                 }).join('')}
             </form>
