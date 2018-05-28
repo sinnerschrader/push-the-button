@@ -10,7 +10,6 @@
 const fs = require('fs');
 const path = require('path');
 const utils = require('./utils');
-const color_utils = require('./color_utils');
 
 const gamesPath = path.resolve(__dirname, '..', 'games');
 const isNoDirectory = file => !fs.statSync(path.resolve(gamesPath, file)).isDirectory();
@@ -57,7 +56,7 @@ const showIntro = (state, time) => {
     }
 
     state.forEach(element => {
-        element.color = color_utils.rgbArray2hex([color,color,color]);
+        element.color = `rgb(${color},${color},${color})`;
     });
     return state
 }

@@ -17,41 +17,11 @@ function getRandomButtonIndex(){
 }
 
 function getRandomRgbArray() {
-    var color	= [];
+    let color = [];
     for (var i = 0; i < 3; i++) {
         color.push(Math.round(Math.random() * 255));
     }
     return color;
-}
-
-function rgbArray2hex(rgbArray) {
-    let hexArray = [];
-    for (let i = 0; i < rgbArray.length; i++) {
-        var hex = rgbArray[i].toString(16);
-        if (hex.length < 2) {
-            hex = "0" + hex;
-        }
-        hexArray.push(hex);
-    }
-    return "#" + hexArray.join("");
-}
-
-function hex2RgbArray(hex){
-    if(hex.charAt(0)!='#'){
-        return [0,0,0];
-    }
-    let rgbArray = [];
-    hex = hex.slice(1);
-    for(let i = 0; i<3; i++){
-        if(hex.length === 3){
-            let c = hex.slice(i*1,i*1+1);
-            c = c+c;
-            rgbArray.push(parseInt(c,16));
-        } else {
-            rgbArray.push(parseInt(hex.slice(i*2,i*2+2),16));
-        }
-    }
-    return rgbArray;
 }
 
 function transition(){
@@ -78,7 +48,7 @@ function transition(){
 function dim(){
     cState.forEach(function(color){
         for(let i = 0; i < 3; i++){
-            if (color[i] > 1) {
+            if (color[i] > 0) {
                 color[i] -= 1;
             }
         }
@@ -90,8 +60,8 @@ function init(state){
     introDuration = INTRO_DURATION;
     cState = [];
     state.forEach(function(button,index){
-        button.color = '#000000';
-        cState[index] = hex2RgbArray(button.color);
+        button.color = 'rgb(0,0,0)';
+        cState[index] = [0,0,0];
     });
 }
 
@@ -116,14 +86,14 @@ module.exports = function (state, process, exit) {
         buttonIndex = getRandomButtonIndex();
         currentColor = cState[buttonIndex];
     }
-    transition();
 
-    if(!Math.round((time/100)%4)){
-        dim();
-    }
+    transition();
+    dim();
+
 
     state.forEach(function(item,index){
-        item.color = rgbArray2hex(cState[index]);
+        let color =  cState[index];
+        item.color = `rgb(${color[0]},${color[1]},${color[2]})`;
     });
 
     if(!state.every((item) => !item.pressed)){
