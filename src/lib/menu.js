@@ -19,9 +19,20 @@ const games = fs.readdirSync(gamesPath).filter(isNoDirectory).map(file => ({
     fn: require(path.join(gamesPath, file))
 }));
 
+const screensaver = {
+    color: 'black',
+    fn: require('./screensaver')
+}
+
 const EXIT_DURATION = 3000;
 let exitHoldDuration = EXIT_DURATION;
 let selectedGame = null;
+
+const IDLE_DURATION = 1000;
+let idleDuration = IDLE_DURATION;
+
+const INTRO_DURATION = 100;
+let introDuration = INTRO_DURATION;
 
 /**
  * Show the available games
@@ -36,11 +47,39 @@ const showGames = (state, games) => {
     return state;
 };
 
+const showIntro = (state, time) => {
+    let color = 0;
+    if(time > INTRO_DURATION/2){
+        color = (INTRO_DURATION-time)*3;
+    } else {
+        color = time*3;
+    }
+
+    state.forEach(element => {
+        element.color = `rgb(${color},${color},${color})`;
+    });
+    return state
+}
+
 /**
  * Game menu
  */
 module.exports = function (state, process) {
+    introDuration--;
+    if (introDuration > 0) {
+        return showIntro(state, introDuration);
+    }
+
     const [ firstBtn, lastBtn ] = state.filter(pixel => pixel.pressed);
+
+    console.log(idleDuration);
+    if(idleDuration <= 0) {
+        selectedGame = screensaver;
+        console.log('start screensaver')
+    } else {
+        idleDuration -= process;
+    }
+
 
     if (exitHoldDuration <= 0) {
         selectedGame = null;
@@ -60,14 +99,21 @@ module.exports = function (state, process) {
     }
 
     if (selectedGame) {
+        console.log(selectedGame);
         state = utils.resetState(state);
         return selectedGame.fn(state, process, () => {
             selectedGame = null;
-            return showGames(state, games);
+            introDuration = INTRO_DURATION;
         });
     }
 
     const pressed = state.find(pixel=> pixel.pressed);
+    if(pressed){
+        console.log('pressed')
+        idleDuration = IDLE_DURATION;
+        selectedGame = null;
+    }
+
     selectedGame = pressed && games.find(game => pressed.color === game.color);
 
     return showGames(state, games);
