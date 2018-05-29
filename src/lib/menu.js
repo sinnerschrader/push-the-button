@@ -28,8 +28,8 @@ const EXIT_DURATION = 3000;
 let exitHoldDuration = EXIT_DURATION;
 let selectedGame = null;
 
-let idleTimeout;
-const IDLE_DURATION = 10000;
+const IDLE_DURATION = 1000;
+let idleDuration = IDLE_DURATION;
 
 const INTRO_DURATION = 100;
 let introDuration = INTRO_DURATION;
@@ -72,10 +72,14 @@ module.exports = function (state, process) {
 
     const [ firstBtn, lastBtn ] = state.filter(pixel => pixel.pressed);
 
-
-    if(!idleTimeout){
-        idleTimeout = setTimeout( () => selectedGame = screensaver,IDLE_DURATION);
+    console.log(idleDuration);
+    if(idleDuration <= 0) {
+        selectedGame = screensaver;
+        console.log('start screensaver')
+    } else {
+        idleDuration -= process;
     }
+
 
     if (exitHoldDuration <= 0) {
         selectedGame = null;
@@ -95,6 +99,7 @@ module.exports = function (state, process) {
     }
 
     if (selectedGame) {
+        console.log(selectedGame);
         state = utils.resetState(state);
         return selectedGame.fn(state, process, () => {
             selectedGame = null;
@@ -104,8 +109,9 @@ module.exports = function (state, process) {
 
     const pressed = state.find(pixel=> pixel.pressed);
     if(pressed){
-        clearTimeout(idleTimeout);
-        idleTimeout = undefined;
+        console.log('pressed')
+        idleDuration = IDLE_DURATION;
+        selectedGame = null;
     }
 
     selectedGame = pressed && games.find(game => pressed.color === game.color);
